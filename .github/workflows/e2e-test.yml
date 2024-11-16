@@ -3,25 +3,25 @@ name: Run E2E Test with Puppeteer
 on:
   pull_request:
     branches:
-      - main  # 将 main 替换为你希望触发的分支
+      - main  
 
 jobs:
   test:
-    runs-on: ubuntu-latest  # 可以根据需求调整为其他环境
+    runs-on: ubuntu-latest 
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2  # 检出 PR 中的代码
+        uses: actions/checkout@v2 
 
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'  # 指定 Node.js 版本
+          node-version: '14' 
 
       - name: Install dependencies
-        run: npm install  # 安装项目依赖
+        run: npm install  
 
       - name: Run Puppeteer E2E Test
-        run: node src/e2e-test.js  # 运行你的 Puppeteer 测试脚本
+        run: node src/e2e-test.js
         env:
-          DISPLAY: :99.0  # 如果需要无头环境，可以设置这个 DISPLAY 变量
+          DISPLAY: :99.0 
