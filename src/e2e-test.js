@@ -1,12 +1,13 @@
-const puppeteer = require('puppeteer-core');
+const puppeteer = require('puppeteer');
 
 (async () => {
   const browser = await puppeteer.launch({
-    headless: false, 
-    executablePath: 'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+    headless: true, 
     args: [
-      `--disable-extensions-except=D:/test/cse210-fa24-group5/src`,
-      `--load-extension=D:/test/cse210-fa24-group5/src`
+      '--no-sandbox', 
+      '--disable-setuid-sandbox',
+      `--disable-extensions-except=./src`,  
+      `--load-extension=./src` 
     ]
   });
 
