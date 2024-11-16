@@ -45,16 +45,9 @@ jobs:
           --output-file eslint-results.sarif
         continue-on-error: true
 
-      - name: Create Valid SARIF File if Missing
-        run: |
-          if [ ! -s eslint-results.sarif ]; then
-            echo '{"version":"2.1.0","runs":[]}' > eslint-results.sarif
-          fi
-
       - name: Verify SARIF File
         run: |
           ls -la eslint-results.sarif
-          
 
       - name: Upload analysis results to GitHub
         uses: github/codeql-action/upload-sarif@v3
