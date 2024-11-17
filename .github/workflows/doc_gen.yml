@@ -1,9 +1,7 @@
 name: JSDoc Documentation Generation
 
 on:
-  push:      
-    branches:
-      - dev
+  create
 
 jobs:
   doc_gen:
