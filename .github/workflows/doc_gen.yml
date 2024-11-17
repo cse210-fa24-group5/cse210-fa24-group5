@@ -3,11 +3,8 @@ name: JSDoc Documentation Generation
 on:
     push:
       branches: [ "dev", "*dev*", "*main*" ]
-    pull_request:
-      # The branches below must be a subset of the branches above
-      branches: [ "dev" ]
 
-      # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
   pages: write
