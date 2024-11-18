@@ -1,6 +1,6 @@
 # Source - https://qa-nora.medium.com/unit-testing-with-jest-and-integration-with-github-actions-bc241b31d257
 
-name: Run Jest Unit Tests
+name: Run Jest and Puppeteer Tests
 
 on:
   pull_request:
@@ -17,7 +17,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '14'
+          node-version: '16'
 
       - name: Install dependencies
         run: npm install
