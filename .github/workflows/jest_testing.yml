@@ -1,6 +1,6 @@
 # Source - https://qa-nora.medium.com/unit-testing-with-jest-and-integration-with-github-actions-bc241b31d257
 
-name: Run Jest Unit Tests
+name: Run Jest and Puppeteer Tests
 
 on:
   pull_request:
