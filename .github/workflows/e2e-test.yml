@@ -3,7 +3,7 @@ name: Run E2E Test with Puppeteer
 on:
   pull_request:
     branches:
-      - main  
+      - dev
 
 jobs:
   test:
