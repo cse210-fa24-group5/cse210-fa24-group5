@@ -6,8 +6,8 @@ describe('Chrome Extension Testing', () => {
   let browser;
   let page;
   let pages;
+  let extensionId;
   const extensionPath = path.join(process.cwd(), 'src');
-  const extensionId = 'hficpndipfpjdmkoigepjnedfbddbcdi';
 
   beforeAll(async () => {
     // Launch browser with extension loaded
@@ -20,15 +20,33 @@ describe('Chrome Extension Testing', () => {
       ]
     });
 
+    // Get the extension id
+    pages = await browser.pages();
+    page = pages[0];
+    await page.goto('chrome://extensions/');
+    await page.waitForSelector('extensions-manager');
+
+    // enable developer mode
+    await page.evaluate(() => {
+      document.querySelector('extensions-manager').shadowRoot.querySelector('extensions-toolbar').shadowRoot.querySelector('cr-toggle').click();
+    });
+    
+    // grab the extension id from textContent within first div that has id "extension-id"
+    const extensionName = 'Hello Extensions';
+    extensionId = await page.evaluate((extensionName) => {
+      const extensions = document.querySelector('extensions-manager').shadowRoot.querySelector('extensions-item-list').shadowRoot.querySelectorAll('extensions-item');
+      const extension = Array.from(extensions).find(e => e.shadowRoot.querySelector('div').textContent.includes(extensionName));
+      return extension.getAttribute('id');
+    }, extensionName);
   });
 
   beforeEach(async () => {
-    // Open a new page
+    // page = browser.newPage();
     pages = await browser.pages();
     page = pages[0];
-    await page.goto(`chrome-extension://${extensionId}/hello.html`);
-    await page.waitForSelector('img');
-  });
+    page.goto(`chrome-extension://${extensionId}/hello.html`);
+    // Navigate to the extension's popup
+  }, 1000000000);
 
   afterEach(async () => {
     // Close the page after each test
@@ -45,6 +63,7 @@ describe('Chrome Extension Testing', () => {
     await page.evaluate(() => {
       chrome.action.openPopup(); 
     });
+    await page.waitForSelector('img');
 
     const popupPage = pages.find(p => !p.isClosed() && p.url().includes('hello.html')); 
 
