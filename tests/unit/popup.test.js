@@ -1,4 +1,4 @@
-const testFunction = require('../popup');
+const testFunction = require('../../src/popup');
 
 test('check 3 * 10 works', () => {
   expect(
