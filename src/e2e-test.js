@@ -11,9 +11,13 @@ const puppeteer = require('puppeteer');
     executablePath: '/usr/bin/google-chrome',
     args: [
       `--disable-extensions-except=${extensionPath}`,
-      `--load-extension=${extensionPath}`,
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
+    `--load-extension=${extensionPath}`,
+    '--no-sandbox',
+    '--disable-setuid-sandbox',
+    '--disable-features=BlockInsecurePrivateNetworkRequests',
+    '--disable-web-security', 
+    '--allow-file-access-from-files',
+    '--allow-running-insecure-content' 
     ]
   });
 
