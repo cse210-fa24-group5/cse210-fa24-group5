@@ -23,6 +23,4 @@ jobs:
         run: npm install
 
       - name: Run Jest tests
-        run: 
-          npm list puppeteer-core
-          npm test
+        run: npm test
