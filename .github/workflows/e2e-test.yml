@@ -21,10 +21,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '16'  
+          node-version: '20'  
 
       - name: Install dependencies
         run: npm install  
+
+      - name: Install additional libraries for Puppeteer
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libxcomposite1 libxrandr2 libgbm-dev libpango-1.0-0
 
       - name: Run Puppeteer E2E Test
         run: node src/e2e-test.js
