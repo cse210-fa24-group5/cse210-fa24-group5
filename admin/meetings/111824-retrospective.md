@@ -1,0 +1,13 @@
+### Retro for sprint 1 meeting 11/18
+- Watched professor's video on retrium
+- Work Happiness radar insight: we're seeing a range in the results, which indicates different level of happiness in our work, will further investigate potential causes in the future steps
+- Mad/Sad/Glad activity insights:
+  - Meetings long at times, and we tend to digress sometimes
+    - Possible solution: try to have clear agenda and designate time slots for talking about each goal/task in meetings
+  - Jobs undone
+    - Auto deployment to chrome extension store
+    - Minification
+  - Our pair-programming-esque style worked well
+  - We are overall satisfied with our work and pace
+  - We have a good team dynamic
+  - We might consider updating with Kashish more often
