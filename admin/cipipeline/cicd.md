@@ -7,6 +7,7 @@
     -  Alternative was CodeClimate, but code climate was significantly more bloated than ESLint for additional functionality that we didn’t need that badly. The final straw was the Ruby/Gemfile.
         
 ###  Code quality via tool (ex. Codeclimate, Codacy, etc.)
+
     -   Not yet implemented
         
 ###   Code quality via human review (ex. pull requests)
@@ -35,8 +36,7 @@
         
     -   This happens on every push of a new tag, and builds our deployable from the ./src folder in the dev branch
         
+
     -   Future goals are to deploy to the chrome extension store on every push to our main branch via custom Github Actions script.
 
 ![CI CD Pipeline Image](./cicd.png)
-
-
