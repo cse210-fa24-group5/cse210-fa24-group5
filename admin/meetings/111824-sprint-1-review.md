@@ -1,3 +1,6 @@
+### Attendance: 
+- Everyone was present either in-person in chez-bob or remote in google meet
+
 ### Things we accomplished this sprint: 
 - Implemented ESLint code checking in Github Actions on every single PR to our dev branch and main
 - equirement for a single reviewer for each PR that gets merged to dev, and 3 reviewers to merge from dev to the main branch
