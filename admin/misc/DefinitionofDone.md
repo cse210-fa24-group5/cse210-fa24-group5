@@ -22,11 +22,12 @@ To close a user story, a sprint, or a milestone, it is important to verify that 
   - [ ] Unfinished work is reprioritized or deferred.
   - [ ] New bugs or learnings from the sprint are logged.
 - [ ] All critical and major bugs are fixed (especially those introduced during the sprint).
-- [ ] The sprint’s deliverables meet the agreed-upon scope and quality expectations by the team.
-- [ ] Sprint demo/review is successfully completed.
+- [ ] The sprint’s deliverables meet the team's agreed-upon scope and quality expectations.
+- [ ] Sprint demo/review is successfully completed (or informally reviewed).
 
 ## Release/Milestone
 
 - [ ] Code complete (all sprint goals are met).
 - [ ] All critical and major bugs are resolved.
 - [ ] Release is marked as ready for production deployment.
+- [ ] Release is deployed onto staging site.
