@@ -6,10 +6,10 @@ To close a user story, a sprint, or a milestone, it is important to verify that 
 
 - [ ] Acceptance criteria are met.
 - [ ] Code builds with no errors.
-- [ ] Unit tests are written and pass / Passed manual tests.
-- [ ] Existing unit tests pass / Passed existing manual tests.
-- [ ] End-to-end tests are written and pass / Passed manual tests.
-- [ ] Existing end-to-end tests pass / Passed existing manual tests.
+- [ ] Unit tests are written and pass (if applicable).
+- [ ] Existing unit tests pass.
+- [ ] End-to-end tests are written and pass (if applicable).
+- [ ] Existing end-to-end tests pass.
 - [ ] Code review is complete / Other team members have checked the code and tested it themselves
 - [ ] Documentation is updated as necessary (e.g., code comments, user guides, API documentation).
 - [ ] All CI/CD pipeline checks (e.g., linting, automated tests) pass.
