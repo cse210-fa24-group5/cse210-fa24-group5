@@ -26,6 +26,6 @@ jobs:
         run: npm test
 
       - name: Upload coverage reports to Codecov with GitHub Action
-        uses: codecov/codecov-action@v4.2.0
+        uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a
         env:
           CODECOV_TOKEN: ${{ secrets.CODE_COV_TOKEN }}
