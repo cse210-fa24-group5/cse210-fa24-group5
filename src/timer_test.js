@@ -1,8 +1,8 @@
 // Create a container for the overlay
 const timerOverlay = document.createElement('div');
-timerOverlay.id = 'timerOverlay';
+timerOverlay.id = 'timer-overlay';
 timerOverlay.innerHTML = `
-  <div id="timerContent">
+  <div id="timer-content">
     <span id="countdown">100:00</span>
     <button id="startTimerButton">Start Timer</button>
     <button id="resetTimerButton">Reset Timer</button>
