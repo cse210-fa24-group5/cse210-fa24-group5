@@ -12,9 +12,8 @@
     box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
     width: auto;
     height: auto;
-  }
-  
-  #timer-content {
+    
+    /* For rearranging the items */
     display: flex;
     flex-direction: column;
     align-items: center;
