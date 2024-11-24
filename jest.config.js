@@ -9,6 +9,7 @@ const config = {
         statements: 80,
       },
     },
+    testEnvironment: 'jsdom'
   };
   
   module.exports = config;
