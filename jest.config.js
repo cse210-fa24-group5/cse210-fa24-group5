@@ -9,6 +9,18 @@ const config = {
         statements: 80,
       },
     },
+    projects: [
+      {
+        'displayName': 'browser',
+        'testEnvironment': 'jest-environment-jsdom',
+        'testMatch': ['**/tests/unit/**'],
+      },
+      {
+        "displayName": "node",
+        "testEnvironment": "node",
+        "testMatch": ["**/tests/integration/**"]
+      }
+    ],
   };
   
   module.exports = config;
