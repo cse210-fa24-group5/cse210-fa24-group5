@@ -31,8 +31,6 @@ async function fetchCompletedProblems(username) {
         }
 
         const recentSubmissions = user_recent.recentAcSubmissionList || [];
-        console.log(`Completed Problems by ${username}:`);
-
         const problemsWithDetails = await Promise.all(
             recentSubmissions.map(async (submission) => {
                 const details = await fetchProblemDetails(submission.titleSlug);
@@ -76,16 +74,13 @@ async function fetchProblemDetails(titleSlug) {
         }
 
         const problem = data.data.question;
-        if (problem) {
-            return {
-                questionId: problem.questionId,
-                title: problem.title,
-                difficulty: problem.difficulty,
-            };
-        } else {
-            console.log(`Problem with titleSlug "${titleSlug}" not found.`);
-            return null;
-        }
+        return problem
+            ? {
+                  questionId: problem.questionId,
+                  title: problem.title,
+                  difficulty: problem.difficulty,
+              }
+            : null;
     } catch (error) {
         console.error("Error fetching problem details:", error);
         return null;
@@ -93,6 +88,7 @@ async function fetchProblemDetails(titleSlug) {
 }
 
 function addProblemButtons(problems, container) {
+    container.innerHTML = ""; // Clear previous content
     problems.forEach((problem) => {
         const button = document.createElement("button");
         button.classList.add("problem-button", problem.difficulty.toLowerCase());
@@ -107,7 +103,7 @@ function addProblemButtons(problems, container) {
 
         const difficultySpan = document.createElement("span");
         difficultySpan.classList.add("difficulty");
-        difficultySpan.textContent = ` ${problem.difficulty}. `;;
+        difficultySpan.textContent = ` ${problem.difficulty}. `;
 
         button.appendChild(numberSpan);
         button.appendChild(titleSpan);
@@ -118,16 +114,24 @@ function addProblemButtons(problems, container) {
 }
 
 async function main() {
-    const username = "cherylstanley28"; // Hard-coded username
-    const problems = await fetchCompletedProblems(username);
-
+    const fetchButton = document.querySelector("#fetchButton");
+    const usernameInput = document.querySelector("#usernameInput");
     const container = document.querySelector(".container");
-    if (!container) {
-        console.error("Container element not found.");
-        return;
-    }
 
-    addProblemButtons(problems, container);
+    fetchButton.addEventListener("click", async () => {
+        const username = usernameInput.value.trim();
+        if (!username) {
+            alert("Please enter a username.");
+            return;
+        }
+
+        const problems = await fetchCompletedProblems(username);
+        if (problems.length === 0) {
+            container.innerHTML = `<p>No completed problems found for "${username}".</p>`;
+        } else {
+            addProblemButtons(problems, container);
+        }
+    });
 }
 
 main();
