@@ -10,9 +10,7 @@ describe('initializeTimer', () => {
                     <div>3[0]
                     </div>
                     <div>3[1]
-                        <div>
-                            Easy
-                        </div>
+                        <div>Easy</div>
                     </div>
                 </div>
             </div>
