@@ -4,9 +4,10 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    width: 420px;
+    height: 540px;
   }
   
   .container {
@@ -14,7 +15,9 @@ body {
     padding: 20px 30px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 400px;
   }
   
   h1 {
@@ -31,13 +34,14 @@ body {
     color: white;
     padding: 10px 15px;
     border: none;
-    border-radius: 8px;
+    border-radius: 5px;
     margin-bottom: 10px;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     text-align: left;
     width: 100%;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* border: 1px solid #ccc; */
   }
   
   .problem-button:hover {
@@ -47,12 +51,17 @@ body {
   
   .problem-title {
     font-weight: bold;
+    flex-grow: 1;
+    margin: 0 10px;
+    color: #2a2a2a;
   }
   
   .difficulty {
     font-size: 14px;
     padding: 3px 8px;
     border-radius: 5px;
+    font-style: italic;
+    color: #2a2a2a;
   }
   
   .problem-button.easy {
@@ -66,4 +75,15 @@ body {
   .problem-button.hard {
     background-color: #dc3545;
   }
-  
+  .problem-number {
+    font-weight: bold;
+    color: #2a2a2a;
+  }
+
+  input[type="text"], button {
+    margin-top: 10px;
+    padding: 10px;
+    width: 100%;
+    max-width: 400px;
+    font-size: 16px;
+  }
