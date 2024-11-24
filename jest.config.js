@@ -9,7 +9,7 @@ const config = {
         statements: 80,
       },
     },
-    testEnvironment: 'jsdom'
+    testEnvironment: 'jest-environment-jsdom'
   };
   
   module.exports = config;
