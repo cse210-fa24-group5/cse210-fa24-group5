@@ -21,6 +21,11 @@ let isRunning = false;
 let isVisible = true;
 
 window.onload = function() {
+  initializeTimer
+};
+
+
+export function initializeTimer() {
   let parentDiv = document.querySelector(`.flexlayout__tab`);
   let difficulty = "None";
 
@@ -43,7 +48,8 @@ window.onload = function() {
   }
 
   updateTimerDisplay(); // initialize timer text on start
-}
+  return minutes
+};
 
 function formatTime(ms) {
   const seconds = Math.ceil(ms / 1000);
