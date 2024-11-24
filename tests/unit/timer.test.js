@@ -1,4 +1,4 @@
-import { initializeTimer } from '../../src/timer';
+const { initializeTimer } = require('../../src/timer');
 
 describe('initializeTimer', () => {
     beforeEach(() => {

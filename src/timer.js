@@ -25,7 +25,7 @@ window.onload = function() {
 };
 
 
-export function initializeTimer() {
+function initializeTimer() {
   let parentDiv = document.querySelector(`.flexlayout__tab`);
   let difficulty = "None";
 
@@ -107,3 +107,6 @@ document.body.addEventListener('click', (event) => {
   if (event.target.id === 'resetTimerButton') resetTimer();
   if (event.target.id === 'showHideTimerButton') showHideTime();
 });
+
+
+module.exports = {initializeTimer};
