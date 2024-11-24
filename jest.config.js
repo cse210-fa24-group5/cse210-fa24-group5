@@ -11,8 +11,13 @@ const config = {
     },
     projects: [
       {
-        testEnvironment: 'jest-environment-jsdom',
-        testMatch: ['**/tests/unit/timer.test.js'],
+        'testEnvironment': 'jest-environment-jsdom',
+        'testMatch': ['**/tests/unit/**'],
+      },
+      {
+        "displayName": "node",
+        "testEnvironment": "node",
+        "testMatch": ["**/tests/integration/**"]
       }
     ],
   };
