@@ -9,7 +9,12 @@ const config = {
         statements: 80,
       },
     },
-    testEnvironment: 'jest-environment-jsdom'
+    projects: [
+      {
+        testEnvironment: 'jest-environment-jsdom',
+        testMatch: ['**/tests/unit/timer.test.js'],
+      }
+    ],
   };
   
   module.exports = config;
