@@ -8,7 +8,7 @@ const config = {
         lines: 80,
         statements: 80,
       },
-      '.src/timer.js': {
+      './src/timer.js': {
         branches: 20,
         functions: 20,
         lines: 20,
