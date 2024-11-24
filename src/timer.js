@@ -1,14 +1,3 @@
-// Create a container for the overlay
-const timerOverlay = document.createElement('div');
-timerOverlay.id = 'timer-overlay';
-timerOverlay.innerHTML = `
-  <span id="countdown">100:00</span>
-  <button id="startTimerButton">Start Timer</button>
-  <button id="resetTimerButton">Reset Timer</button>
-  <button id="showHideTimerButton">Hide Timer</button>
-`;
-document.body.appendChild(timerOverlay);
-
 let minutes = 0.1; // Countdown duration in minutes
 let countdownTime = minutes * 60 * 1000; // Total time in milliseconds
 
@@ -26,6 +15,16 @@ window.onload = function() {
 
 
 function initializeTimer() {
+  const timerOverlay = document.createElement('div');
+  timerOverlay.id = 'timer-overlay';
+  timerOverlay.innerHTML = `
+    <span id="countdown">100:00</span>
+    <button id="startTimerButton">Start Timer</button>
+    <button id="resetTimerButton">Reset Timer</button>
+    <button id="showHideTimerButton">Hide Timer</button>
+  `;
+  document.body.appendChild(timerOverlay);
+
   let parentDiv = document.querySelector(`.flexlayout__tab`);
   let difficulty = "None";
 

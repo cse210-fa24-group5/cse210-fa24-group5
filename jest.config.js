@@ -5,7 +5,7 @@ const config = {
       global: {
         branches: 80,
         functions: 80,
-        lines: 80,
+        lines: 500,
         statements: 80,
       },
     },
