@@ -8,6 +8,9 @@ export default [
     languageOptions: {
       globals: globals.node,
     },
+    rules: {
+      "no-use-before-define": "error",
+    },
   },
   pluginJs.configs.recommended,
   eslintPluginPrettierRecommended,

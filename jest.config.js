@@ -10,15 +10,15 @@ const config = {
   },
   projects: [
     {
-      'displayName': 'browser',
-      'testEnvironment': 'jest-environment-jsdom',
-      'testMatch': ['**/tests/unit/**'],
+      displayName: "browser",
+      testEnvironment: "jest-environment-jsdom",
+      testMatch: ["**/tests/unit/**"],
     },
     {
-      "displayName": "node",
-      "testEnvironment": "node",
-      "testMatch": ["**/tests/integration/**"]
-    }
+      displayName: "node",
+      testEnvironment: "node",
+      testMatch: ["**/tests/integration/**"],
+    },
   ],
 };
 
