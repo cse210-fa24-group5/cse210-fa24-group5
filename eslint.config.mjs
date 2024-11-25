@@ -10,6 +10,7 @@ export default [
     },
     rules: {
       "no-use-before-define": "error",
+      camelcase: "error",
     },
   },
   pluginJs.configs.recommended,
