@@ -10,7 +10,7 @@ describe('Timer Functionality', () => {
       // Set up a mock DOM for timer tests
       document.body.innerHTML = `
         <div id="timer-overlay">
-          <span id="countdown">100:00</span>
+          <span id="countdown">0:04</span>
           <button id="startTimerButton">Start Timer</button>
           <button id="resetTimerButton">Reset Timer</button>
           <button id="showHideTimerButton">Hide Timer</button>
@@ -40,23 +40,23 @@ describe('Timer Functionality', () => {
     it('counts down time correctly', () => {
       startTimerButton.click(); // Start the timer
   
-      // Advance time by 1 minute (60 seconds)
-      jest.advanceTimersByTime(60000);
+      // Advance time by 2 seconds
+      jest.advanceTimersByTime(2000);
   
       // Check the countdown display
-      expect(countdownElement.textContent).toBe('99:00'); // Timer should decrement by 1 minute
+      expect(countdownElement.textContent).toBe('0:02'); // Timer should decrement by 2 seconds
     });
   
     it('resets the timer correctly', () => {
       startTimerButton.click(); // Start the timer
   
-      // Advance time by 30 seconds
-      jest.advanceTimersByTime(30000);
+      // Advance time by 3 seconds
+      jest.advanceTimersByTime(3000);
   
       resetTimerButton.click(); // Reset the timer
   
       // Verify reset
-      expect(countdownElement.textContent).toBe('100:00'); // Timer should reset to initial time
+      expect(countdownElement.textContent).toBe('0:04'); // Timer should reset to initial time
     });
   
     it('toggles show/hide timer correctly', () => {
