@@ -1,13 +1,13 @@
 let minutes = 0.06; // Initial Dummy Duration of Timer in Minutes (4 seconds)
-let countdownTime = minutes * 60 * 1000; // Converts time to milliseconds
+var countdownTime = minutes * 60 * 1000; // Converts time to milliseconds
 
 let easyMinute = 0.06; // Default Time for Easy Diff Problems
 let mediumMinute = 40; // Default Time for Medium Diff Problems
 let hardMinute = 60; // Default Time for Hard Diff Problems
-let endTime = null; // Timestamp when the timer should end
-let timerInterval = null; // Stores the ID of the active interval (let's us clear or stop timer)
-let isRunning = false; // Status Checker for if Timer is counting down or not
-let isVisible = true; // Status Checker for if Timer is Visible or Hidden
+var endTime = null; // Timestamp when the timer should end
+var timerInterval = null; // Stores the ID of the active interval (let's us clear or stop timer)
+var isRunning = false; // Status Checker for if Timer is counting down or not
+var isVisible = true; // Status Checker for if Timer is Visible or Hidden
 
 /**
  * 
@@ -36,7 +36,9 @@ function updateTimerDisplay() {
   if (remainingTime <= 0 && isRunning) {
     clearInterval(timerInterval);
     isRunning = false;
-    alert("Time's up!");
+    setTimeout(() => {
+      alert("Time's up!");
+    }, 10);
   }
 }
 
@@ -138,4 +140,14 @@ document.body.addEventListener('click', (event) => {
   if (event.target.id === 'showHideTimerButton') showHideTime();
 });
 
-module.exports = {initializeTimer, checkDifficulty};
+function isESModuleSupported() {
+  try {
+    new Function("import('data:text/javascript,export{}')");
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+if (isESModuleSupported()) {
+  module.exports = {initializeTimer, checkDifficulty};
+}
