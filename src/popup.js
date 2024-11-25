@@ -10,17 +10,19 @@ document.addEventListener('DOMContentLoaded', () => {
       "Longest Substring Without Repeating Characters"
   ];
 
-  chrome.storage.local.get(['completed', 'todo'], (result) => {
-      const completed = result.completed || [];
-      const todo = result.todo || initialTodo;
+  function fetchAndRender() {
+      chrome.storage.local.get(['completed', 'todo'], (result) => {
+          const completed = result.completed || [];
+          let todo = result.todo;
+          if (!todo || todo.length === 0) {
+              todo = initialTodo;
+              chrome.storage.local.set({ todo });
+          }
 
-      if (!result.todo) {
-          chrome.storage.local.set({ todo });
-      }
-
-      renderList(completedList, completed);
-      renderList(todoList, todo);
-  });
+          renderList(completedList, completed);
+          renderList(todoList, todo);
+      });
+  }
 
   function renderList(container, items) {
       container.innerHTML = '';
@@ -30,25 +32,9 @@ document.addEventListener('DOMContentLoaded', () => {
           container.appendChild(li);
       });
   }
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (message.action === 'submissionSuccess') {
-          const { problemTitle } = message;
 
-          chrome.storage.local.get(['completed', 'todo'], (result) => {
-              const completed = result.completed || [];
-              const todo = result.todo || [];
+  fetchAndRender();
 
-              if (!completed.includes(problemTitle)) {
-                  completed.push(problemTitle); 
-              }
-              console.log(problemTitle);
-              const updatedTodo = todo.filter(item => item !== problemTitle);
 
-              chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
-                  renderList(completedList, completed);
-                  renderList(todoList, updatedTodo);
-              });
-          });
-      }
-  });
+  setInterval(fetchAndRender, 5000);
 });
