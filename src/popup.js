@@ -1,39 +1,54 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const completedList = document.getElementById('completed-list');
-  
-    // Initialize the completion list
-    chrome.storage.local.get(['completed'], (result) => {
+  const completedList = document.getElementById('completed-list');
+  const todoList = document.getElementById('todo-list');
+
+  const initialTodo = [
+      "Two Sum",
+      "Reverse Linked List",
+      "Binary Search",
+      "Merge Intervals",
+      "Longest Substring Without Repeating Characters"
+  ];
+
+  chrome.storage.local.get(['completed', 'todo'], (result) => {
       const completed = result.completed || [];
-      renderList(completedList, completed);
-    });
-  
-    function renderList(container, items) {
-      container.innerHTML = ''; // Clear list
-      items.forEach((item) => {
-        const li = document.createElement('li');
-        li.textContent = item;
-        container.appendChild(li);
-      });
-    }
-  
-    // Add new entry to the completed list upon submitting a valid solution
-    chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-      if (message.action === 'submissionSuccess') {
-        const { problemTitle } = message;
-  
-        // Get the current completion list and update
-        chrome.storage.local.get(['completed'], (result) => {
-          const completed = result.completed || [];
-          if (!completed.includes(problemTitle)) {
-            completed.push(problemTitle); // Add new topic title
-          }
-  
-          // Save to local storage and update UI
-          chrome.storage.local.set({ completed }, () => {
-            renderList(completedList, completed);
-          });
-        });
+      const todo = result.todo || initialTodo;
+
+      if (!result.todo) {
+          chrome.storage.local.set({ todo });
       }
-    });
+
+      renderList(completedList, completed);
+      renderList(todoList, todo);
   });
-  
+
+  function renderList(container, items) {
+      container.innerHTML = '';
+      items.forEach((item) => {
+          const li = document.createElement('li');
+          li.textContent = item;
+          container.appendChild(li);
+      });
+  }
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+      if (message.action === 'submissionSuccess') {
+          const { problemTitle } = message;
+
+          chrome.storage.local.get(['completed', 'todo'], (result) => {
+              const completed = result.completed || [];
+              const todo = result.todo || [];
+
+              if (!completed.includes(problemTitle)) {
+                  completed.push(problemTitle); 
+              }
+              console.log(problemTitle);
+              const updatedTodo = todo.filter(item => item !== problemTitle);
+
+              chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
+                  renderList(completedList, completed);
+                  renderList(todoList, updatedTodo);
+              });
+          });
+      }
+  });
+});
