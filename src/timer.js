@@ -1,7 +1,7 @@
 let minutes = 100; // Initial Dummy Duration of Timer in Minutes (100 minutes)
 let countdownTime = minutes * 60 * 1000; // Converts time to milliseconds
 
-let easyMinute = 20; // Default Time for Easy Diff Problems
+let easyMinute = 0.06; // Default Time for Easy Diff Problems
 let mediumMinute = 40; // Default Time for Medium Diff Problems
 let hardMinute = 60; // Default Time for Hard Diff Problems
 let endTime = null; // Timestamp when the timer should end
