@@ -9,14 +9,23 @@ let timerInterval = null; // Stores the ID of the active interval (let's us clea
 let isRunning = false; // Status Checker for if Timer is counting down or not
 let isVisible = true; // Status Checker for if Timer is Visible or Hidden
 
+/**
+ * 
+ * @param {number} ms - remaining timestamp in number format
+ * @returns {string} formatted - formatted time for timer to display
+ */
 function formatTime(ms) {
   const seconds = Math.ceil(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
+  const formatted = `${minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
 
-  return `${minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+  return formatted
 }
 
+/**
+ * Updates timer's display time based on remaining time
+ */
 function updateTimerDisplay() {
   const now = Date.now();
   const remainingTime = endTime ? Math.max(endTime - now, 0) : countdownTime; // Default to initial value
@@ -31,6 +40,9 @@ function updateTimerDisplay() {
   }
 }
 
+/**
+ * Starts timer if timer is not currently running
+ */
 function startTimer() {
   if (isRunning) return;
 
@@ -39,6 +51,9 @@ function startTimer() {
   timerInterval = setInterval(updateTimerDisplay, 100); // Refresh every 100ms
 }
 
+/**
+ * Resets timer
+ */
 function resetTimer() {
   clearInterval(timerInterval);
   timerInterval = 5;
@@ -47,6 +62,9 @@ function resetTimer() {
   updateTimerDisplay(); // Reset display
 }
 
+/**
+ * Toggles visibility of countdown time
+ */
 function showHideTime() {
   const countdownElement = document.getElementById('countdown');
   if (isVisible) {
@@ -59,6 +77,10 @@ function showHideTime() {
   isVisible = !isVisible; // Toggle visibility state
 }
 
+/**
+ * Checks if difficulty is available on current page
+ * @returns {string | null} - Fetched difficulty of current problem or null if not found
+ */
 function checkDifficulty() {
   let parentDiv = document.querySelector(`.flexlayout__tab`);
   if (!parentDiv) {
@@ -69,6 +91,10 @@ function checkDifficulty() {
   return difficulty;
 }
 
+/**
+ * Initializes timer's components and remaining time
+ * @returns {number}  minutes - minutes remaining for timer
+ */
 function initializeTimer() {
   const timerOverlay = document.createElement('div');
   timerOverlay.id = 'timer-overlay';
@@ -96,11 +122,16 @@ function initializeTimer() {
   return minutes
 };
 
+/**
+ * Initialize timer on loading window
+ */
 window.onload = function() {
   initializeTimer();
 };
 
-// Event listeners for buttons
+/**
+ * Listeners for buttons
+ */
 document.body.addEventListener('click', (event) => {
   if (event.target.id === 'startTimerButton') startTimer();
   if (event.target.id === 'resetTimerButton') resetTimer();
