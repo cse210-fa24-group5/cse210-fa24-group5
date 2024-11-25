@@ -1,4 +1,4 @@
-let minutes = 100; // Initial Dummy Duration of Timer in Minutes (100 minutes)
+let minutes = 0.06; // Initial Dummy Duration of Timer in Minutes (4 seconds)
 let countdownTime = minutes * 60 * 1000; // Converts time to milliseconds
 
 let easyMinute = 0.06; // Default Time for Easy Diff Problems
@@ -73,7 +73,7 @@ function initializeTimer() {
   const timerOverlay = document.createElement('div');
   timerOverlay.id = 'timer-overlay';
   timerOverlay.innerHTML = `
-    <span id="countdown">100:00</span>
+    <span id="countdown">0:04</span>
     <button id="startTimerButton">Start Timer</button>
     <button id="resetTimerButton">Reset Timer</button>
     <button id="showHideTimerButton">Hide Timer</button>
