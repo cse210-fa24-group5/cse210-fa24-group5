@@ -166,12 +166,6 @@ describe('checkDifficulty Functionality', () => {
           </div>
         </div>
       </div>
-      <div id="timer-overlay">
-          <span id="countdown">0:04</span>
-          <button id="startTimerButton">Start Timer</button>
-          <button id="resetTimerButton">Reset Timer</button>
-          <button id="showHideTimerButton">Hide Timer</button>
-      </div>
     `;
     
     initializeTimer(); // Initialize timer based on the DOM setup
