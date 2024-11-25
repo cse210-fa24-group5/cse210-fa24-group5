@@ -1,15 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     const completedList = document.getElementById('completed-list');
   
-    // 初始化完成列表
+    // Initialize the completion list
     chrome.storage.local.get(['completed'], (result) => {
       const completed = result.completed || [];
       renderList(completedList, completed);
     });
   
-    // 渲染列表
     function renderList(container, items) {
-      container.innerHTML = ''; // 清空列表
+      container.innerHTML = ''; // Clear list
       items.forEach((item) => {
         const li = document.createElement('li');
         li.textContent = item;
@@ -17,19 +16,19 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
   
-    // 监听来自 content-script 的消息
+    // Add new entry to the completed list upon submitting a valid solution
     chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       if (message.action === 'submissionSuccess') {
         const { problemTitle } = message;
   
-        // 获取当前完成列表并更新
+        // Get the current completion list and update
         chrome.storage.local.get(['completed'], (result) => {
           const completed = result.completed || [];
           if (!completed.includes(problemTitle)) {
-            completed.push(problemTitle); // 添加新的题目标题
+            completed.push(problemTitle); // Add new topic title
           }
   
-          // 保存到本地存储并更新 UI
+          // Save to local storage and update UI
           chrome.storage.local.set({ completed }, () => {
             renderList(completedList, completed);
           });
