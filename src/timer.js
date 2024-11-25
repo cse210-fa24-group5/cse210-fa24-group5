@@ -62,7 +62,6 @@ function showHideTime() {
 function checkDifficulty() {
   let parentDiv = document.querySelector(`.flexlayout__tab`);
   if (!parentDiv) {
-    console.log("No div found with the class: ", parentDiv);
     return null;
   }
   let difficulty;
@@ -82,17 +81,14 @@ function initializeTimer() {
   document.body.appendChild(timerOverlay);
 
   let difficulty = checkDifficulty(); 
-  console.log("diff:", difficulty);
   if (difficulty == "Easy") {
-    console.log(minutes)
     minutes = easyMinute;
-    console.log(minutes)
   } else if (difficulty == "Medium") {
     minutes = mediumMinute;
   } else if (difficulty == "Hard") {
     minutes = hardMinute;
   } else {
-    console.log("No difficulty found");
+    console.log("No difficulty found (expected for Timer unit test)");
   }
   countdownTime = minutes * 60 * 1000;
 
