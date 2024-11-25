@@ -16,7 +16,7 @@ describe('LeetCode Timer Overlay Testing', () => {
   beforeAll(async () => {
     // Launch browser with extension loaded
     browser = await puppeteer.launch({
-      headless: false,  // Set to true for headless, false to view the browser
+      headless: true,  // Set to true for headless, false to view the browser
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
