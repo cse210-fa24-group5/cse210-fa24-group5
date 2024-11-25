@@ -92,7 +92,7 @@ function initializeTimer() {
   }
   countdownTime = minutes * 60 * 1000;
 
-  updateTimerDisplay(); // initialize timer text on start
+  resetTimer(); // initialize timer text on start
   return minutes
 };
 

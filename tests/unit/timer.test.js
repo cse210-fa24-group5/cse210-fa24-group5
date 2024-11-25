@@ -1,22 +1,17 @@
 /**
  * @jest-environment jsdom
  */
+// Simple timeout to wait for actions to process especially for time to countdown
+function timeout(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 const { initializeTimer, checkDifficulty } = require('../../src/timer');
 
 describe('Timer Functionality', () => {
     let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
   
     beforeEach(() => {
-      // Set up a mock DOM for timer tests
-      document.body.innerHTML = `
-        <div id="timer-overlay">
-          <span id="countdown">0:04</span>
-          <button id="startTimerButton">Start Timer</button>
-          <button id="resetTimerButton">Reset Timer</button>
-          <button id="showHideTimerButton">Hide Timer</button>
-        </div>
-      `;
-  
       // Initialize the timer
       initializeTimer();
   
@@ -71,11 +66,33 @@ describe('Timer Functionality', () => {
       showHideTimerButton.click();
       expect(countdownElement.style.display).not.toBe('none'); // Timer should now be visible again
     });
-  });
+
+    it('alerts when time is up', () => {
+      // Mock the window.alert function
+      jest.spyOn(global, 'alert').mockImplementation(() => {});
+    
+      startTimerButton.click(); // Start the timer
+      
+      // Advance time by the countdown period (e.g., 4 seconds for Easy)
+      jest.advanceTimersByTime(4000);
+    
+      // Expect alert to be triggered when time is up
+      expect(global.alert).toHaveBeenCalledWith("Time's up!"); // Check if alert was called
+    
+      // Restore the original alert function
+      global.alert.mockRestore();
+    });    
+});
 
 describe('checkDifficulty Functionality', () => {
-  beforeEach(() => {
-    // Set up a mock DOM for checkDifficulty tests
+  let countdownElement;
+
+  afterEach(() => {
+    document.body.innerHTML = '';
+  });
+
+  it('correctly identifies the difficulty as Easy', () => {
+    // Set up a mock DOM for "Easy"
     document.body.innerHTML = `
       <div class="flexlayout__tab">Hello, World!
         <div>1
@@ -88,10 +105,86 @@ describe('checkDifficulty Functionality', () => {
         </div>
       </div>
     `;
+
+    const difficulty = checkDifficulty(); // Calls checkDifficulty function
+    expect(difficulty).toBe('Easy'); // Check if it returns 'Easy'
   });
 
-  it('correctly identifies the difficulty from the DOM', () => {
-    const difficulty = checkDifficulty();
-    expect(difficulty).toBe('Easy'); // Ensure it fetches the correct difficulty
+  it('sets the timer duration for Easy difficulty', () => {
+    // Set up a mock DOM for "Easy"
+    document.body.innerHTML = `
+      <div class="flexlayout__tab">
+        <div>1
+          <div>2
+            <div>3[0]</div>
+            <div>3[1]
+              <div>Easy</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+
+    initializeTimer(); // Initialize timer based on the DOM setup
+
+    // Get DOM elements
+    countdownElement = document.getElementById('countdown');
+
+    // Check if the timer duration is set to 4 seconds for Easy
+    expect(countdownElement.textContent).toBe('0:04'); // Easy should be 0:04 (4 seconds)
+  });
+
+  it('sets the timer duration for Medium difficulty', () => {
+    // Set up a mock DOM for "Medium"
+    document.body.innerHTML = `
+      <div class="flexlayout__tab">
+        <div>1
+          <div>2
+            <div>3[0]</div>
+            <div>3[1]
+              <div>Medium</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    initializeTimer(); // Initialize timer based on the DOM setup
+
+    // Get DOM elements
+    countdownElement = document.getElementById('countdown');
+    
+    // Check if the timer duration is set to 40 minutes for Medium
+    expect(countdownElement.textContent).toBe('40:00'); // Medium should be 40:00 (40 minutes)
+  });
+
+  it('sets the timer duration for Hard difficulty', () => {
+    // Set up a mock DOM for "Hard"
+    document.body.innerHTML = `
+      <div class="flexlayout__tab">
+        <div>1
+          <div>2
+            <div>3[0]</div>
+            <div>3[1]
+              <div>Hard</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="timer-overlay">
+          <span id="countdown">0:04</span>
+          <button id="startTimerButton">Start Timer</button>
+          <button id="resetTimerButton">Reset Timer</button>
+          <button id="showHideTimerButton">Hide Timer</button>
+      </div>
+    `;
+    
+    initializeTimer(); // Initialize timer based on the DOM setup
+
+    // Get DOM elements
+    countdownElement = document.getElementById('countdown');
+
+    // Check if the timer duration is set to 60 minutes for Hard
+    expect(countdownElement.textContent).toBe('60:00'); // Hard should be 60:00 (60 minutes)
   });
 });
