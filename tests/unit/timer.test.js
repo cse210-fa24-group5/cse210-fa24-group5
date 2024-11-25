@@ -1,11 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-// Simple timeout to wait for actions to process especially for time to countdown
-function timeout(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 const { initializeTimer, checkDifficulty } = require('../../src/timer');
 
 describe('Timer Functionality', () => {
