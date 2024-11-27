@@ -1,3 +1,5 @@
+// TODO figure out if unused vars are necessary
+// eslint-disable-next-line no-unused-vars
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === "submissionSuccess") {
     const { problemTitle } = message;
