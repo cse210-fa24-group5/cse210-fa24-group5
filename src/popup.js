@@ -1,6 +1,6 @@
-console.log('This is a popup!');
+console.log("This is a popup!");
 
 function testFunction(a) {
-    return a * 10;
+  return a * 10;
 }
 module.exports = testFunction;
