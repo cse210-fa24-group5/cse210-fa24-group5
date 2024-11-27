@@ -106,8 +106,11 @@ function initializeTimer() {
     <button id="resetTimerButton">Reset Timer</button>
     <button id="showHideTimerButton">Hide Timer</button>
   `;
-  document.body.appendChild(timerOverlay);
-
+  const timr = document.getElementById("timer-overlay");
+  if (timr) {
+  } else {
+    document.body.appendChild(timerOverlay);
+  }
   let difficulty = checkDifficulty(); 
   if (difficulty == "Easy") {
     minutes = easyMinute;
@@ -139,6 +142,19 @@ document.body.addEventListener('click', (event) => {
   if (event.target.id === 'resetTimerButton') resetTimer();
   if (event.target.id === 'showHideTimerButton') showHideTime();
 });
+
+/**
+ * Resets timer on changing to problem on same page
+ */
+function onUrlChange() {
+  console.log('URL changed to:', window.location.href);
+  initializeTimer();
+  resetTimer();
+}
+const titleObserver = new MutationObserver(() => {
+  onUrlChange();
+});
+titleObserver.observe(document.querySelector('title'), {childList: true });
 
 function isESModuleSupported() {
   try {
