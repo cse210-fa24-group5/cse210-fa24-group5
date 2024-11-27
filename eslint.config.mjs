@@ -9,7 +9,7 @@ export default [
       globals: {
         ...globals.browser,
         ...globals.node,
-        chrome: "writable",
+        ...globals.webextensions,
       },
     },
     rules: {
