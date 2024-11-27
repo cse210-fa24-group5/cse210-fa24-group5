@@ -154,7 +154,6 @@ function onUrlChange() {
 const titleObserver = new MutationObserver(() => {
   onUrlChange();
 });
-titleObserver.observe(document.querySelector('title'), {childList: true });
 
 function isESModuleSupported() {
   try {
@@ -166,4 +165,6 @@ function isESModuleSupported() {
 }
 if (isESModuleSupported()) {
   module.exports = {initializeTimer, checkDifficulty};
+} else {
+  titleObserver.observe(document.querySelector('title'), {childList: true });
 }
