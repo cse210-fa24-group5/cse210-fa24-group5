@@ -6,7 +6,11 @@ import eslintPluginPrettierRecommended from "eslint-plugin-prettier/recommended"
 export default [
   {
     languageOptions: {
-      globals: globals.node,
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        ...globals.webextensions,
+      },
     },
     rules: {
       "no-use-before-define": "error",

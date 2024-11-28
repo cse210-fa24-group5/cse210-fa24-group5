@@ -46,7 +46,7 @@ describe("Chrome Extension Testing", () => {
     });
 
     // grab the extension id from textContent within first div that has id "extension-id"
-    const extensionName = "Hello Extensions";
+    const extensionName = "LeetCode Task Manager";
     extensionId = await page.evaluate((extensionName) => {
       const extensions = document
         .querySelector("extensions-manager")
@@ -77,17 +77,21 @@ describe("Chrome Extension Testing", () => {
   });
 
   // TODO - Add your test cases here
-  test("Image element is present in popup", async () => {
+  test("Title is present in popup", async () => {
     await page.evaluate(() => {
       chrome.action.openPopup();
     });
-    await page.waitForSelector("img");
+    await page.waitForSelector("h1");
 
     const popupPage = pages.find(
       (p) => !p.isClosed() && p.url().includes("hello.html"),
     );
 
-    const imageElement = await popupPage.$("img");
-    expect(imageElement).toBeTruthy();
+    const titleElement = await popupPage.$("h1");
+    const titleContent = await popupPage.evaluate(
+      (titleElement) => titleElement.textContent,
+      titleElement,
+    );
+    expect(titleContent).toBe("LeetCode Task Manager");
   });
 });
