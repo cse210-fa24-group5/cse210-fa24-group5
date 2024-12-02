@@ -6,7 +6,8 @@
   "permissions": [
     "storage",
     "activeTab",
-    "scripting"
+    "scripting",
+    "notifications"
   ],
   "host_permissions": [
     "https://leetcode.com/*"
@@ -18,7 +19,8 @@
   "content_scripts": [
     {
       "matches": ["https://leetcode.com/*"],
-      "js": ["content-script.js"]
+      "js": ["content-script.js", "timer.js"],
+      "css":["timer.css"]
     }
   ]
 }
