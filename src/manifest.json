@@ -1,19 +1,26 @@
 {
-    "name": "Hello Extensions",
-    "description": "Base Level Extension",
-    "version": "1.0",
-    "manifest_version": 3,
-    "action": {
-      "default_popup": "hello.html",
-      "default_icon": "hello_extensions.png"
-    },
-    "permissions": ["tabs", "notifications"],
-    "host_permissions": ["https://leetcode.com/*"],
-    "content_scripts": [
-      {
-        "matches": ["https://leetcode.com/problems/*"],
-        "js": ["timer.js"],
-        "css": ["timer.css"]
-      }
-    ]
-  }
+  "name": "LeetCode Task Manager",
+  "description": "Manage To-Do and Completed tasks for LeetCode",
+  "version": "1.0",
+  "manifest_version": 3,
+  "permissions": [
+    "storage",
+    "activeTab",
+    "scripting",
+    "notifications"
+  ],
+  "host_permissions": [
+    "https://leetcode.com/*"
+  ],
+  "action": {
+    "default_popup": "hello.html",
+    "default_icon": "hello_extensions.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://leetcode.com/*"],
+      "js": ["content-script.js", "timer.js"],
+      "css":["timer.css"]
+    }
+  ]
+}

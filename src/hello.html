@@ -1,15 +1,27 @@
-<html>
-  <!-- Temporary Styling to show full Home Page mockup img -->
-  <style>
-    body {
-      display: flex;
-      width: 420px;
-      height: 540px;
-    }
-  </style>
-  <body>
-    <script src="popup.js"></script>
-    <!-- The img of the Hpme Page -->
-    <img src="HomePage.png" alt="Home Page of Chrome Extension">
-  </body>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LeetCode Task Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <h1>LeetCode Task Manager</h1>
+  <div class="list-container">
+    <div class="list-section">
+      <h2>To-Do</h2>
+      <ul id="todo-list"></ul>
+      <div class="task-input-container">
+        <input type="text" id="new-task" placeholder="Add a new task..." />
+        <button id="add-task">+</button>
+      </div>
+    </div>
+    <div class="list-section">
+      <h2>Completed</h2>
+      <ul id="completed-list"></ul>
+    </div>
+  </div>
+  <script src="popup.js"></script>
+</body>
 </html>

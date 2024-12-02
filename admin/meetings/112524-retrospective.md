@@ -1,0 +1,13 @@
+### Retro for sprint 2 meeting 11/25
+- Used retrium to guide our retro meeting
+- Work Happiness radar insight: this week's happiness radar is slightly smaller than last time's, it could be due to overlapping in our work
+- Mad/Sad/Glad activity insights:
+  - Leetcode API and webpage are hard to work with
+    - If have time in the end, need to find more elegant solutions
+  - Some of us are doing overlapping work, which is inefficient
+    - Maybe need to have smaller issues
+    - Maybe need clearer definition of tasks
+  - Need more communication between pair-programming groups
+  - We are overall satisfied with our work and pace
+  - Meetings are generally shorter and more efficient
+  - We have a good team dynamic

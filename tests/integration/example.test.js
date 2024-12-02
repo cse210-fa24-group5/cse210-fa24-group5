@@ -1,13 +1,23 @@
-const puppeteer = require('puppeteer');
-const path = require('path');
-const { describe, test, expect, beforeEach, afterEach } = require('@jest/globals');
+const puppeteer = require("puppeteer");
+const path = require("path");
+const {
+  describe,
+  test,
+  expect,
+  beforeEach,
+  afterEach,
+  beforeAll,
+  afterAll,
+  chrome,
+  document,
+} = require("@jest/globals");
 
-describe('Chrome Extension Testing', () => {
+describe("Chrome Extension Testing", () => {
   let browser;
   let page;
   let pages;
   let extensionId;
-  const extensionPath = path.join(process.cwd(), 'src');
+  const extensionPath = path.join(process.cwd(), "src");
 
   beforeAll(async () => {
     // Launch browser with extension loaded
@@ -16,27 +26,36 @@ describe('Chrome Extension Testing', () => {
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
-        '--no-sandbox'
-      ]
+        "--no-sandbox",
+      ],
     });
 
     // Get the extension id
     pages = await browser.pages();
     page = pages[0];
-    await page.goto('chrome://extensions/');
-    await page.waitForSelector('extensions-manager');
+    await page.goto("chrome://extensions/");
+    await page.waitForSelector("extensions-manager");
 
     // enable developer mode
     await page.evaluate(() => {
-      document.querySelector('extensions-manager').shadowRoot.querySelector('extensions-toolbar').shadowRoot.querySelector('cr-toggle').click();
+      document
+        .querySelector("extensions-manager")
+        .shadowRoot.querySelector("extensions-toolbar")
+        .shadowRoot.querySelector("cr-toggle")
+        .click();
     });
-    
+
     // grab the extension id from textContent within first div that has id "extension-id"
-    const extensionName = 'Hello Extensions';
+    const extensionName = "LeetCode Task Manager";
     extensionId = await page.evaluate((extensionName) => {
-      const extensions = document.querySelector('extensions-manager').shadowRoot.querySelector('extensions-item-list').shadowRoot.querySelectorAll('extensions-item');
-      const extension = Array.from(extensions).find(e => e.shadowRoot.querySelector('div').textContent.includes(extensionName));
-      return extension.getAttribute('id');
+      const extensions = document
+        .querySelector("extensions-manager")
+        .shadowRoot.querySelector("extensions-item-list")
+        .shadowRoot.querySelectorAll("extensions-item");
+      const extension = Array.from(extensions).find((e) =>
+        e.shadowRoot.querySelector("div").textContent.includes(extensionName),
+      );
+      return extension.getAttribute("id");
     }, extensionName);
   });
 
@@ -58,16 +77,21 @@ describe('Chrome Extension Testing', () => {
   });
 
   // TODO - Add your test cases here
-  test('Image element is present in popup', async () => {  
-
+  test("Title is present in popup", async () => {
     await page.evaluate(() => {
-      chrome.action.openPopup(); 
+      chrome.action.openPopup();
     });
-    await page.waitForSelector('img');
+    await page.waitForSelector("h1");
 
-    const popupPage = pages.find(p => !p.isClosed() && p.url().includes('hello.html')); 
+    const popupPage = pages.find(
+      (p) => !p.isClosed() && p.url().includes("hello.html"),
+    );
 
-    const imageElement = await popupPage.$('img');
-    expect(imageElement).toBeTruthy();
+    const titleElement = await popupPage.$("h1");
+    const titleContent = await popupPage.evaluate(
+      (titleElement) => titleElement.textContent,
+      titleElement,
+    );
+    expect(titleContent).toBe("LeetCode Task Manager");
   });
 });
