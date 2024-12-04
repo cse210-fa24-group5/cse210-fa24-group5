@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     console.log("rendering");
     container.innerHTML = "";
     items.forEach((item, index) => {
-      const li = document.createElement("li");   
+      const li = document.createElement("li");
       li.textContent = item;
       li.id = item;
       let removeButton = document.createElement("button");
