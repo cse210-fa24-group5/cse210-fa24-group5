@@ -14,10 +14,32 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   function renderList(container, items) {
+    console.log("rendering");
     container.innerHTML = "";
-    items.forEach((item) => {
-      const li = document.createElement("li");
+    items.forEach((item, index) => {
+      const li = document.createElement("li");   
       li.textContent = item;
+      li.id = item;
+      let removeButton = document.createElement("button");
+      removeButton.textContent = "x";
+      
+      //removeButton.classList.add(); <-- add a css style if we want
+      removeButton.addEventListener("click", () => {
+
+
+        chrome.storage.local.get(["todo"], (result) => {
+          const todo = result.todo || [];
+          const updatedTodo = todo.filter(
+            (currItem) => currItem !== item,
+          );
+
+          chrome.storage.local.set({ todo: updatedTodo }, () => {
+            console.log("Storage updated successfully.");
+            fetchAndRender();
+          });
+        });
+      });
+      li.appendChild(removeButton);
       container.appendChild(li);
     });
   }
@@ -28,11 +50,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const completed = result.completed || [];
       let todo = result.todo;
 
-      if (!todo || todo.length === 0) {
+      if (!todo) {
         todo = initialTodo;
         chrome.storage.local.set({ todo });
       }
-
+      
       renderList(completedList, completed);
       renderList(todoList, todo);
     });
