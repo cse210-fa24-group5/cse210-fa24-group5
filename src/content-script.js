@@ -14,7 +14,7 @@ function saveProblemTitle() {
       console.log(`Stored problem title: ${currentProblemTitle}`);
     });
   } else {
-    console.warn("Problem title element not found.");
+    console.log("Problem title element not found.");
   }
 }
 
