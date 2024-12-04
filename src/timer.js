@@ -10,7 +10,7 @@ var isRunning = false; // Status Checker for if Timer is counting down or not
 var isVisible = true; // Status Checker for if Timer is Visible or Hidden
 
 /**
- * 
+ *
  * @param {number} ms - remaining timestamp in number format
  * @returns {string} formatted - formatted time for timer to display
  */
@@ -18,9 +18,9 @@ function formatTime(ms) {
   const seconds = Math.ceil(ms / 1000);
   const minutes = Math.floor(seconds / 60);
   const remainingSeconds = seconds % 60;
-  const formatted = `${minutes}:${remainingSeconds < 10 ? '0' + remainingSeconds : remainingSeconds}`;
+  const formatted = `${minutes}:${remainingSeconds < 10 ? "0" + remainingSeconds : remainingSeconds}`;
 
-  return formatted
+  return formatted;
 }
 
 /**
@@ -30,7 +30,7 @@ function updateTimerDisplay() {
   const now = Date.now();
   const remainingTime = endTime ? Math.max(endTime - now, 0) : countdownTime; // Default to initial value
 
-  document.getElementById('countdown').textContent = formatTime(remainingTime);
+  document.getElementById("countdown").textContent = formatTime(remainingTime);
 
   // Stop the timer when it reaches 0
   if (remainingTime <= 0 && isRunning) {
@@ -68,13 +68,13 @@ function resetTimer() {
  * Toggles visibility of countdown time
  */
 function showHideTime() {
-  const countdownElement = document.getElementById('countdown');
+  const countdownElement = document.getElementById("countdown");
   if (isVisible) {
-    countdownElement.style.display = 'none';
-    document.getElementById('showHideTimerButton').textContent = 'Show Timer';
+    countdownElement.style.display = "none";
+    document.getElementById("showHideTimerButton").textContent = "Show Timer";
   } else {
-    countdownElement.style.display = 'block';
-    document.getElementById('showHideTimerButton').textContent = 'Hide Timer';
+    countdownElement.style.display = "block";
+    document.getElementById("showHideTimerButton").textContent = "Hide Timer";
   }
   isVisible = !isVisible; // Toggle visibility state
 }
@@ -89,7 +89,8 @@ function checkDifficulty() {
     return null;
   }
   let difficulty;
-  difficulty = parentDiv.children[0].children[0].children[1].children[0].textContent;
+  difficulty =
+    parentDiv.children[0].children[0].children[1].children[0].textContent;
   return difficulty;
 }
 
@@ -98,8 +99,8 @@ function checkDifficulty() {
  * @returns {number}  minutes - minutes remaining for timer
  */
 function initializeTimer() {
-  const timerOverlay = document.createElement('div');
-  timerOverlay.id = 'timer-overlay';
+  const timerOverlay = document.createElement("div");
+  timerOverlay.id = "timer-overlay";
   timerOverlay.innerHTML = `
     <span id="countdown">0:04</span>
     <button id="startTimerButton">Start Timer</button>
@@ -108,10 +109,11 @@ function initializeTimer() {
   `;
   const timr = document.getElementById("timer-overlay");
   if (timr) {
+    console.log("Timer found");
   } else {
     document.body.appendChild(timerOverlay);
   }
-  let difficulty = checkDifficulty(); 
+  let difficulty = checkDifficulty();
   if (difficulty == "Easy") {
     minutes = easyMinute;
   } else if (difficulty == "Medium") {
@@ -124,30 +126,30 @@ function initializeTimer() {
   countdownTime = minutes * 60 * 1000;
 
   resetTimer(); // initialize timer text on start
-  return minutes
-};
+  return minutes;
+}
 
 /**
  * Initialize timer on loading window
  */
-window.onload = function() {
+window.onload = function () {
   initializeTimer();
 };
 
 /**
  * Listeners for buttons
  */
-document.body.addEventListener('click', (event) => {
-  if (event.target.id === 'startTimerButton') startTimer();
-  if (event.target.id === 'resetTimerButton') resetTimer();
-  if (event.target.id === 'showHideTimerButton') showHideTime();
+document.body.addEventListener("click", (event) => {
+  if (event.target.id === "startTimerButton") startTimer();
+  if (event.target.id === "resetTimerButton") resetTimer();
+  if (event.target.id === "showHideTimerButton") showHideTime();
 });
 
 /**
  * Resets timer on changing to problem on same page
  */
 function onUrlChange() {
-  console.log('URL changed to:', window.location.href);
+  console.log("URL changed to:", window.location.href);
   initializeTimer();
   resetTimer();
 }
@@ -160,11 +162,12 @@ function isESModuleSupported() {
     new Function("import('data:text/javascript,export{}')");
     return true;
   } catch (e) {
+    console.log(e);
     return false;
   }
 }
 if (isESModuleSupported()) {
-  module.exports = {initializeTimer, checkDifficulty};
+  module.exports = { initializeTimer, checkDifficulty };
 } else {
-  titleObserver.observe(document.querySelector('title'), {childList: true });
+  titleObserver.observe(document.querySelector("title"), { childList: true });
 }

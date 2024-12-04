@@ -13,35 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
     "Longest Substring Without Repeating Characters",
   ];
 
-  function renderList(container, items) {
-    console.log("rendering");
-    container.innerHTML = "";
-    items.forEach((item, index) => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      li.id = item;
-      let removeButton = document.createElement("button");
-      removeButton.textContent = "x";
-      
-      //removeButton.classList.add(); <-- add a css style if we want
-      removeButton.addEventListener("click", () => {
-        chrome.storage.local.get(["todo"], (result) => {
-          const todo = result.todo || [];
-          const updatedTodo = todo.filter(
-            (currItem) => currItem !== item,
-          );
-
-          chrome.storage.local.set({ todo: updatedTodo }, () => {
-            console.log("Storage updated successfully.");
-            fetchAndRender();
-          });
-        });
-      });
-      li.appendChild(removeButton);
-      container.appendChild(li);
-    });
-  }
-
   // 初始化并渲染任务列表
   function fetchAndRender() {
     chrome.storage.local.get(["completed", "todo"], (result) => {
@@ -52,9 +23,39 @@ document.addEventListener("DOMContentLoaded", () => {
         todo = initialTodo;
         chrome.storage.local.set({ todo });
       }
-      
+
+      // eslint-disable-next-line no-use-before-define
       renderList(completedList, completed);
+      // eslint-disable-next-line no-use-before-define
       renderList(todoList, todo);
+    });
+  }
+
+  function renderList(container, items) {
+    console.log("rendering");
+    container.innerHTML = "";
+    items.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      li.id = item;
+      let removeButton = document.createElement("button");
+      removeButton.textContent = "x";
+
+      //removeButton.classList.add(); <-- add a css style if we want
+      removeButton.addEventListener("click", () => {
+        chrome.storage.local.get(["todo"], (result) => {
+          const todo = result.todo || [];
+          const updatedTodo = todo.filter((currItem) => currItem !== item);
+
+          chrome.storage.local.set({ todo: updatedTodo }, () => {
+            console.log("Storage updated successfully.");
+
+            fetchAndRender();
+          });
+        });
+      });
+      li.appendChild(removeButton);
+      container.appendChild(li);
     });
   }
 
