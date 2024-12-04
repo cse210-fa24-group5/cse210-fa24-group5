@@ -25,8 +25,6 @@ document.addEventListener("DOMContentLoaded", () => {
       
       //removeButton.classList.add(); <-- add a css style if we want
       removeButton.addEventListener("click", () => {
-
-
         chrome.storage.local.get(["todo"], (result) => {
           const todo = result.todo || [];
           const updatedTodo = todo.filter(
