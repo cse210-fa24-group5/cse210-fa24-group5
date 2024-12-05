@@ -1,3 +1,12 @@
+document.getElementById("backToTodo").addEventListener("click", () =>{
+  document.getElementById("completed-page").style.display = "none";
+  document.getElementById("todo-page").style.display = "block";
+});
+document.getElementById("goToCompleted").addEventListener("click", () =>{
+  document.getElementById("todo-page").style.display = "none";
+  document.getElementById("completed-page").style.display = "block";
+});
+
 document.addEventListener("DOMContentLoaded", () => {
   const completedList = document.getElementById("completed-list");
   const todoList = document.getElementById("todo-list");
