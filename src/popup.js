@@ -1,95 +1,101 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // 获取任务列表和输入框、按钮
   const completedList = document.getElementById("completed-list");
   const todoList = document.getElementById("todo-list");
-  const newTaskInput = document.getElementById("new-task"); // 获取输入框
-  const addTaskButton = document.getElementById("add-task"); // 获取加号按钮
 
+  //default todo list if the initial state is empty
   const initialTodo = [
-    "Two Sum",
-    "Reverse Linked List",
-    "Binary Search",
-    "Merge Intervals",
-    "Longest Substring Without Repeating Characters",
+    {
+      title: "Two Sum",
+      number: "1",
+      link: "https://leetcode.com/problems/two-sum/",
+      difficulty: "Easy"
+    }
   ];
 
-  // 初始化并渲染任务列表
+  //fetching the completed and todo-list from storage and rendering them
   function fetchAndRender() {
     chrome.storage.local.get(["completed", "todo"], (result) => {
       const completed = result.completed || [];
       let todo = result.todo;
 
-      if (!todo) {
+      if (!todo || todo.length === 0) {
         todo = initialTodo;
         chrome.storage.local.set({ todo });
+        console.log("initial todo", todo);
       }
-
       // eslint-disable-next-line no-use-before-define
       renderList(completedList, completed);
       // eslint-disable-next-line no-use-before-define
-      renderList(todoList, todo);
+      renderTodoList(todoList, todo);
     });
   }
 
-  function renderList(container, items) {
-    console.log("rendering");
-    container.innerHTML = "";
-    items.forEach((item) => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      li.id = item;
-      let removeButton = document.createElement("button");
+  //renders the To-do list elements
+  function renderTodoList(container, items) {
+    console.log("rendering To-do");
+    container.innerHTML = ""; // Clear the existing list
+    items.forEach((problem) => {
+      //created span elements for better CSS handling
+      const spanTitle = document.createElement("span");
+      const spanNumber = document.createElement("span");
+      const spanDifficulty = document.createElement("span");
+  
+      spanTitle.textContent = problem.title;
+      spanNumber.textContent = problem.number;
+      spanDifficulty.textContent = problem.difficulty;
+  
+      const button = document.createElement("button");
+      button.appendChild(spanNumber);
+      button.appendChild(spanTitle);
+      button.appendChild(spanDifficulty);
+      button.classList.add("problem-button");
+  
+      const removeButton = document.createElement("button");
       removeButton.textContent = "x";
-
-      //removeButton.classList.add(); <-- add a css style if we want
       removeButton.addEventListener("click", () => {
         chrome.storage.local.get(["todo"], (result) => {
           const todo = result.todo || [];
-          const updatedTodo = todo.filter((currItem) => currItem !== item);
-
+          const updatedTodo = todo.filter((currItem) => JSON.stringify(currItem) !== JSON.stringify(problem));
+  
           chrome.storage.local.set({ todo: updatedTodo }, () => {
             console.log("Storage updated successfully.");
-
             fetchAndRender();
           });
         });
       });
+  
+      const li = document.createElement("li");
+      li.appendChild(button);
       li.appendChild(removeButton);
       container.appendChild(li);
     });
-  }
+  };
 
-  // 添加新任务到 To-Do List
-  addTaskButton.addEventListener("click", () => {
-    const newTask = newTaskInput.value.trim(); // 获取输入框中的值
-    if (newTask) {
-      chrome.storage.local.get(["todo"], (result) => {
-        const todo = result.todo || [];
-        if (!todo.includes(newTask)) {
-          todo.push(newTask); // 添加新任务
-          chrome.storage.local.set({ todo }, () => {
-            console.log("New task added:", newTask);
-            renderList(todoList, todo); // 更新显示
-          });
-        } else {
-          alert("Task already exists!"); // 防止重复任务
-        }
-      });
-      newTaskInput.value = ""; // 清空输入框
-    } else {
-      alert("Please enter a task!"); // 提示用户输入
-    }
-  });
+  function renderList(container,items){
+    console.log("rendering completed problems list");
+    container.innerHTML = ""; // Clear the existing list
+    items.forEach((problem) => {
+      //created span elements for better CSS handling
+      const spanTitle = document.createElement("span");
+      const spanNumber = document.createElement("span");
+      const spanDifficulty = document.createElement("span");
+  
+      spanTitle.textContent = problem.title;
+      spanNumber.textContent = problem.number;
+      spanDifficulty.textContent = problem.difficulty;
+  
+      const button = document.createElement("button");
+      button.appendChild(spanNumber);
+      button.appendChild(spanTitle);
+      button.appendChild(spanDifficulty);
+      button.classList.add("problem-button");
+      const li = document.createElement("li");
+      li.appendChild(button);
+      container.appendChild(li);
+    });
+  };
 
-  // 支持按回车键添加任务
-  newTaskInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      addTaskButton.click(); // 模拟点击加号按钮
-    }
-  });
 
   fetchAndRender();
-
-  // 每隔5秒刷新一次任务列表
   setInterval(fetchAndRender, 5000);
 });

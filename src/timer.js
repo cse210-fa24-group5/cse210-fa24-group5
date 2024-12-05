@@ -132,9 +132,9 @@ function initializeTimer() {
 /**
  * Initialize timer on loading window
  */
-window.onload = function () {
-  initializeTimer();
-};
+// window.onload = function () {
+//   initializeTimer();
+// };
 
 /**
  * Listeners for buttons
