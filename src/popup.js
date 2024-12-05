@@ -48,10 +48,23 @@ document.addEventListener("DOMContentLoaded", () => {
       button.appendChild(spanNumber);
       button.appendChild(spanTitle);
       button.appendChild(spanDifficulty);
+      // button.addEventListener("click", function() {
+      //   console.log("Button clicked for problem:", problem);
+      //   console.log("Problem link:", problem.link);
+      //   window.location.href = problem.link;
+      // });      
       button.classList.add("problem-button");
-  
+      //for styling purpose
+      if (problem.difficulty === "Easy") {
+        button.classList.add("easy-difficulty");
+      } else if (problem.difficulty === "Medium") {
+        button.classList.add("medium-difficulty");
+      } else if (problem.difficulty === "Hard") {
+        button.classList.add("hard-difficulty");
+      }  
       const removeButton = document.createElement("button");
       removeButton.textContent = "x";
+      removeButton.classList.add("remove-button");
       removeButton.addEventListener("click", () => {
         chrome.storage.local.get(["todo"], (result) => {
           const todo = result.todo || [];
@@ -88,6 +101,17 @@ document.addEventListener("DOMContentLoaded", () => {
       button.appendChild(spanNumber);
       button.appendChild(spanTitle);
       button.appendChild(spanDifficulty);
+      // button.addEventListener("click", function() {
+      //   window.location.href = problem.link;
+      // });
+      //for styling purpose
+      if (problem.difficulty === "Easy") {
+        button.classList.add("easy-difficulty");
+      } else if (problem.difficulty === "Medium") {
+        button.classList.add("medium-difficulty");
+      } else if (problem.difficulty === "Hard") {
+        button.classList.add("hard-difficulty");
+      } 
       button.classList.add("problem-button");
       const li = document.createElement("li");
       li.appendChild(button);

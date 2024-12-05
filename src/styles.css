@@ -1,99 +1,113 @@
+/* General Styling */
 body {
   font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f4f4f4;
-  color: #333;
+  margin: 20px;
+  background-color: #f5f5f5;
 }
 
 h1 {
   text-align: center;
-  background-color: #4caf50;
-  color: white;
-  margin: 0;
-  padding: 20px 0;
-  font-size: 24px;
+  color: #333;
+}
+
+h2 {
+  color: #555;
+  text-align: left;
+  margin-bottom: 10px;
 }
 
 .list-container {
   display: flex;
-  justify-content: space-between;
-  align-items: baseline; /* 使用基线对齐 */
-  margin: 20px auto;
-  padding: 20px;
-  max-width: 800px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+  justify-content: space-around;
+  gap: 20px;
 }
 
 .list-section {
-  flex: 1; /* 两列等宽 */
-  margin: 0 10px; /* 增加左右间距 */
+  flex: 1;
 }
-
-h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
-  border-bottom: 2px solid #4caf50;
-  padding-bottom: 5px;
-  text-align: center;
-  box-sizing: border-box;
-  height: 30px; /* 设置固定高度，确保对齐 */
-  line-height: 30px; /* 确保文字垂直居中 */
-}
-
-
-
 
 ul {
-  list-style: none;
+  list-style-type: none;
   padding: 0;
   margin: 0;
-  max-height: 250px; /* 设置最大高度，方便滚动 */
-  overflow-y: auto; /* 启用滚动条 */
-  border: 1px solid #ddd;
+}
+
+li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
   border-radius: 5px;
-  padding: 10px;
-  background-color: #f9f9f9;
+  overflow: hidden;
 }
 
-ul li {
+/* Problem Button Styling */
+.problem-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-grow: 1;
   padding: 10px;
-  margin: 5px 0;
-  background-color: #e9ffe9;
-  border-radius: 4px;
-  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
 }
 
-div input[type="text"] {
-  width: calc(100% - 60px); /* 宽度自动调整，与按钮配合 */
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  box-sizing: border-box; /* 包括 padding 在内计算宽度 */
+.problem-button span {
+  margin: 0 10px;
 }
 
-div button {
-  width: 50px; /* 设置按钮宽度 */
-  height: 50px; /* 设置按钮高度 */
-  margin-left: 10px; /* 与输入框保持间距 */
-  background-color: #4caf50;
+/* Remove Button Styling */
+button.remove-button {
+  padding: 10px;
+  background-color: #ff4d4f;
   color: white;
   border: none;
-  border-radius: 50%;
+  border-radius: 5px; 
   cursor: pointer;
-  font-size: 20px;
+  font-weight: bold;
   text-align: center;
-  box-shadow: 0 4px 8px rgb(0 0 0 / 20%);
+  box-shadow: 0 4px 8px rgb(0 0 0 / 20%); 
 }
 
-div button:hover {
-  background-color: #45a049;
+button.remove-button:hover {
+  background-color: #e33d3f;
 }
 
-div.task-input-container {
-  display: flex; /* 使输入框和按钮在同一行 */
-  margin-top: 15px; /* 上方留出空间 */
-  align-items: center; /* 垂直居中 */
+/* Problem list item styling */
+.problem-button span:nth-child(1) {
+  color: black;
+  font-weight: normal;
+}
+
+.problem-button span:nth-child(2) {
+  flex-grow: 1;
+  text-align: left;
+}
+
+.problem-button span:nth-child(3) {
+  font-style: italic;
+}
+
+/* Background Colors by Difficulty */
+.easy-difficulty {
+  background-color: #4caf50; 
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.medium-difficulty {
+  background-color: #ffc107; 
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.hard-difficulty {
+  background-color: #f44336;
+  color: black;
+  padding: 5px 10px;
+  border-radius: 4px;
 }
