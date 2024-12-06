@@ -30,6 +30,13 @@ document.addEventListener("DOMContentLoaded", () => {
         });
       }
     });
+    chrome.storage.local.get([ "mins"], (result) => {
+      if (!result.mins ) {
+        chrome.storage.local.set({ mins: [20,40,60]}, () => {
+          console.log("Storage initialized with 20, 40, 60 minutes.");
+        });
+      }
+    });
   }
 
   //fetching the completed and todo-list from storage and rendering them.

@@ -1,9 +1,9 @@
 let minutes = 0.06; // Initial Dummy Duration of Timer in Minutes (4 seconds)
 var countdownTime = minutes * 60 * 1000; // Converts time to milliseconds
 
-let easyMinute = 0.06; // Default Time for Easy Diff Problems
-let mediumMinute = 40; // Default Time for Medium Diff Problems
-let hardMinute = 60; // Default Time for Hard Diff Problems
+var easyMinute = 11; // Default Time for Easy Diff Problems
+var mediumMinute = 33; // Default Time for Medium Diff Problems
+var hardMinute = 55; // Default Time for Hard Diff Problems
 var endTime = null; // Timestamp when the timer should end
 var timerInterval = null; // Stores the ID of the active interval (let's us clear or stop timer)
 var isRunning = false; // Status Checker for if Timer is counting down or not
@@ -94,18 +94,30 @@ function checkDifficulty() {
   return difficulty;
 }
 
+function fetchTimeAndInitialize() {
+  let times = [21,41,61];
+  chrome.storage.local.get([ "mins"], (result) => {
+    times = result.mins;
+    initializeTimer(times);
+  });
+}
+
 /**
  * Initializes timer's components and remaining time
  * @returns {number}  minutes - minutes remaining for timer
  */
-function initializeTimer() {
+function initializeTimer(times = [20,40,60]) {
+  easyMinute = times[0];
+  mediumMinute = times[1];
+  hardMinute = times[2];
   const timerOverlay = document.createElement("div");
   timerOverlay.id = "timer-overlay";
   timerOverlay.innerHTML = `
-    <span id="countdown">0:04</span>
+    <span id="countdown">99:99</span>
     <button id="startTimerButton">Start Timer</button>
     <button id="resetTimerButton">Reset Timer</button>
     <button id="showHideTimerButton">Hide Timer</button>
+    <button id="settingPageButton">Set Times</button>
   `;
   const timr = document.getElementById("timer-overlay");
   if (timr) {
@@ -129,6 +141,51 @@ function initializeTimer() {
   return minutes;
 }
 
+function showSettingsPage() {
+  const settingPage = document.getElementById("setting-overlay");
+  if (settingPage) {
+    console.log("Setting Page found");
+    settingPage.style.display = "flex";
+  } else {
+    const settingsOverlay = document.createElement("div");
+    settingsOverlay.id = "setting-overlay";
+    settingsOverlay.innerHTML = `
+      <label for="easy">Easy (Minutes): </label>
+      <input type="number" id="easy">
+      <label for="medium">Medium (Minutes): </label>
+      <input type="number" id="medium">
+      <label for="hard">Hard (Minutes): </label>
+      <input type="number" id="hard">
+      <button id="submitSettingButton">Submit</button>
+      <button id="closeSettingPageButton">Close</button>
+    `;
+    document.body.appendChild(settingsOverlay);
+  }
+  document.getElementById('easy').value = easyMinute;
+  document.getElementById('medium').value = mediumMinute;
+  document.getElementById('hard').value = hardMinute;
+}
+
+function hideSettingsPage() {
+  const settingsElement = document.getElementById("setting-overlay");
+  settingsElement.style.display = "none";
+}
+
+function submitSettings() {
+  const ez = document.getElementById('easy').value;
+  const mid = document.getElementById('medium').value;
+  const hard = document.getElementById('hard').value;
+  new_times = [ez, mid,hard];
+  chrome.storage.local.set({ mins: new_times }, () => {
+    window.alert("Settings Saved!")
+    fetchTimeAndInitialize();
+    hideSettingsPage();
+  })
+}
+
+window.addEventListener("load", () => { 
+  fetchTimeAndInitialize();
+})
 /**
  * Initialize timer on loading window
  */
@@ -143,6 +200,9 @@ document.body.addEventListener("click", (event) => {
   if (event.target.id === "startTimerButton") startTimer();
   if (event.target.id === "resetTimerButton") resetTimer();
   if (event.target.id === "showHideTimerButton") showHideTime();
+  if (event.target.id === "settingPageButton") showSettingsPage();
+  if (event.target.id === "closeSettingPageButton") hideSettingsPage();
+  if (event.target.id === "submitSettingButton") submitSettings();
 });
 
 /**
@@ -150,7 +210,7 @@ document.body.addEventListener("click", (event) => {
  */
 function onUrlChange() {
   console.log("URL changed to:", window.location.href);
-  initializeTimer();
+  fetchTimeAndInitialize();
   resetTimer();
 }
 const titleObserver = new MutationObserver(() => {
