@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty, isESModuleSupported } = require("../../src/timer");
+const { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange } = require("../../src/timer");
 const {
   describe,
   beforeEach,
@@ -15,6 +15,7 @@ describe("Timer Functionality", () => {
 
   beforeEach(() => {
     // Initialize the timer
+    onUrlChange();
     initializeTimer();
 
     // Get DOM elements
