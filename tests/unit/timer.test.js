@@ -1,13 +1,14 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty, isESModuleSupported } = require("../../src/timer");
+const { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange } = require("../../src/timer");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
 
   beforeEach(() => {
     // Initialize the timer
+    // onUrlChange()? //TODO
     initializeTimer([0.06, 40, 60]);
 
     // Get DOM elements
