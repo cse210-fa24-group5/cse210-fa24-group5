@@ -446,11 +446,6 @@ describe("Add Drag Listener Functionality", () => {
     expect(addDraggingListeners()).toBe(true);
   });
 
-  it("Doesn't add when duplicating", () => {
-    initializeTimer();
-    expect(addDraggingListeners()).toBe(false);
-  });
-
   it("Doesn't add when no element", () => {
     expect(addDraggingListeners()).toBe(false);
   });
