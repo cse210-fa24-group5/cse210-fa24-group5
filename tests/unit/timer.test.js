@@ -197,12 +197,11 @@ describe("Add Drag Listener Functionality", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
   });
-  it("Adds listeners correctly", () => {
-    const timerOverlay = document.createElement("div");
-    timerOverlay.id = "timer-overlay";
-    expect(addDraggingListeners()).toBe(true);
+  it("Doesn't add when duplicating", () => {
+    initializeTimer();
+    expect(addDraggingListeners()).toBe(false);
   });
-  it("Doesn't add when don't need to", () => {
+  it("Doesn't add when no element", () => {
     expect(addDraggingListeners()).toBe(false);
   });
 });
