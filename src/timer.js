@@ -102,28 +102,33 @@ function checkDifficulty() {
  */
 function addDraggingListeners() {
   const timerOverlay = document.getElementById("timer-overlay");
+  if (!timerOverlay) {
+    return false;
+  }
   if (!isListenerAdded) {
-    timerOverlay.addEventListener('mousedown', function(event) {
-      document.body.style.userSelect = 'none'; //can't select text when dragging
+    timerOverlay.addEventListener("mousedown", function(event) {
+      document.body.style.userSelect = "none"; //can't select text when dragging
       isDragging = true;
       offsetX = event.clientX - timerOverlay.offsetLeft;
       offsetY = event.clientY - timerOverlay.offsetTop;
-      timerOverlay.style.cursor = 'grabbing'; 
+      timerOverlay.style.cursor = "grabbing"; 
     });
-    document.addEventListener('mousemove', function(event) {
+    document.addEventListener("mousemove", function(event) {
         if (isDragging) {
-          timerOverlay.style.left = event.clientX - offsetX + 'px';
-          timerOverlay.style.top = event.clientY - offsetY + 'px';
+          timerOverlay.style.left = event.clientX - offsetX + "px";
+          timerOverlay.style.top = event.clientY - offsetY + "px";
         }
     });
-    document.addEventListener('mouseup', function() {
+    document.addEventListener("mouseup", function() {
         if (isDragging) {
-            document.body.style.userSelect = '';
+            document.body.style.userSelect = "";
             isDragging = false;
-            timerOverlay.style.cursor = 'grab';
+            timerOverlay.style.cursor = "grab";
         }
     });
+    return true;
   }
+  return false;
 }
 
 /**
@@ -267,6 +272,7 @@ if (isESModuleSupported()) {
     checkDifficulty,
     isESModuleSupported,
     onUrlChange,
+    addDraggingListeners
   };
 } else {
   titleObserver.observe(document.querySelector("title"), { childList: true });

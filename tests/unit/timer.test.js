@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange } = require("../../src/timer");
+const { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange, addDraggingListeners } = require("../../src/timer");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
@@ -235,6 +235,10 @@ describe("checkDifficulty Functionality", () => {
     // Check if the timer duration is set to 60 minutes for Hard
     expect(countdownElement.textContent).toBe("60:00"); // Hard should be 60:00 (60 minutes)
   });
+  
+});
+
+describe("Detect environment Functionality", () => {
   it("Detects environment correctly", () => {
     expect(isESModuleSupported()).toBe(true, "The environment should support ES modules");
   });
@@ -428,5 +432,20 @@ describe("Timer Settings Functionality", () => {
     expect(countdownElement.textContent).toBe("5:00"); // Adjust this based on your timer format
 
     window.alert.mockRestore();
+  });
+});
+
+describe("Add Drag Listener Functionality", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("Adds listeners correctly", () => {
+    const timerOverlay = document.createElement("div");
+    expect(addDraggingListeners()).toBe(true);
+  });
+
+  it("Doesn't add when don't need to", () => {
+    expect(addDraggingListeners()).toBe(false);
   });
 });
