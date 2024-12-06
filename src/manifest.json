@@ -19,7 +19,11 @@
   "content_scripts": [
     {
       "matches": ["https://leetcode.com/*"],
-      "js": ["content-script.js", "timer.js"],
+      "js": ["content-script.js"]
+    },
+    {
+      "matches": ["https://leetcode.com/problems/*"],
+      "js": ["timer.js", "hijackAddButton.js"],
       "css":["timer.css"]
     }
   ]
