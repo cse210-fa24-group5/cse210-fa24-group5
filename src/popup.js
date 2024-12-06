@@ -1,3 +1,4 @@
+//Displays either todo page or completes list page based on the event trigger source.
 document.getElementById("backToTodo").addEventListener("click", () =>{
   document.getElementById("completed-page").style.display = "none";
   document.getElementById("todo-page").style.display = "block";
@@ -13,17 +14,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const EMPTY_TODO_MESSAGE = "No tasks in your To-Do list!";
   const EMPTY_COMPLETED_MESSAGE = "No tasks completed yet!";
-  
-  //default todo list if the initial state is empty
-  // const initialTodo = [
-  //   {
-  //     title: "Two Sum",
-  //     number: "1",
-  //     link: "https://leetcode.com/problems/two-sum/",
-  //     difficulty: "Easy"
-  //   }
-  // ];
-  
+   
   function initializeStorage() {
     chrome.storage.local.get(["completed"], (result) => {
       if (!result.completed) {
@@ -41,20 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //fetching the completed and todo-list from storage and rendering them
+  //fetching the completed and todo-list from storage and rendering them.
   function fetchAndRender() {
     chrome.storage.local.get(["completed", "todo"], (result) => {
       const completed = result.completed || [];
       let todo = result.todo;
-
-      // if (!todo || todo.length === 0) {
-      //   todo = initialTodo;
-      //   chrome.storage.local.set({ todo });
-      //   console.log("initial todo", todo);
-      // }
-      // eslint-disable-next-line no-use-before-define
       renderList(completedList, completed);
-      // eslint-disable-next-line no-use-before-define
       renderTodoList(todoList, todo);
     });
   }
@@ -81,6 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
         button.appendChild(spanNumber);
         button.appendChild(spanTitle);
         button.appendChild(spanDifficulty);
+        // if we wanna add the link -  but i didnot test this locally yet
         // button.addEventListener("click", function() {
         //   console.log("Button clicked for problem:", problem);
         //   console.log("Problem link:", problem.link);
@@ -118,6 +102,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  //Renders the completed list items
   function renderList(container,items){
     console.log("rendering completed problems list");
     container.innerHTML = ""; // Clear the existing list
@@ -139,9 +124,6 @@ document.addEventListener("DOMContentLoaded", () => {
         button.appendChild(spanNumber);
         button.appendChild(spanTitle);
         button.appendChild(spanDifficulty);
-        // button.addEventListener("click", function() {
-        //   window.location.href = problem.link;
-        // });
         //for styling purpose
         if (problem.difficulty === "Easy") {
           button.classList.add("easy-difficulty");
@@ -158,6 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  // renders the empty state of todo/completed list 
   function renderEmptyState(container, message) {
     const emptyMessage = document.createElement("p");
     emptyMessage.textContent = message;
