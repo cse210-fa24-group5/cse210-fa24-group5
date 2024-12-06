@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty } = require("../../src/timer");
+const { initializeTimer, checkDifficulty, isESModuleSupported } = require("../../src/timer");
 const {
   describe,
   beforeEach,
