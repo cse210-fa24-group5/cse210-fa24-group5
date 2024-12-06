@@ -157,6 +157,10 @@ const titleObserver = new MutationObserver(() => {
   onUrlChange();
 });
 
+/**
+ * Check dependencies, only run observer if in browser
+ * @returns true if in test environment, false if not
+ */
 function isESModuleSupported() {
   try {
     new Function("import('data:text/javascript,export{}')");
@@ -167,7 +171,7 @@ function isESModuleSupported() {
   }
 }
 if (isESModuleSupported()) {
-  module.exports = { initializeTimer, checkDifficulty };
+  module.exports = { initializeTimer, checkDifficulty, isESModuleSupported };
 } else {
   titleObserver.observe(document.querySelector("title"), { childList: true });
 }
