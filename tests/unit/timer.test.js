@@ -442,6 +442,7 @@ describe("Add Drag Listener Functionality", () => {
 
   it("Adds listeners correctly", () => {
     const timerOverlay = document.createElement("div");
+    timerOverlay.id = "timer-overlay";
     expect(addDraggingListeners()).toBe(true);
   });
   it("Doesn't add when don't need to", () => {
