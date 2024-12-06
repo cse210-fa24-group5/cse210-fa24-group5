@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty } = require("../../src/timer");
+const { initializeTimer, checkDifficulty, isESModuleSupported } = require("../../src/timer");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
