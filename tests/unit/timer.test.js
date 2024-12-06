@@ -235,8 +235,8 @@ describe("checkDifficulty Functionality", () => {
     expect(countdownElement.textContent).toBe("60:00"); // Hard should be 60:00 (60 minutes)
   });
   it("Detects environment correctly", () => {
-    expect(isESModuleSupported).toBe(true);
-  })
+    expect(isESModuleSupported).toBe(true, "The environment should support ES modules");
+  });
 });
 
 describe("Timer Settings Functionality", () => {
