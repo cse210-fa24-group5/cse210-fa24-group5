@@ -39,10 +39,10 @@ function initializeHijackButton() {
       if (!todo.some(task => task.number === number)) {
         todo.push(newTask);
         chrome.storage.local.set({ todo }, () => {
-          alert(`Problem ${title} #${number} of difficulty ${difficulty} added to Todo List! Link: ${link}`);
+          console.log(`Problem ${title} #${number} of difficulty ${difficulty} added to Todo List! Link: ${link}`);
         });
       } else {
-        alert("This problem is already in the Todo List!");
+        console.log("This problem is already in the Todo List!");
       }
     });
   });
