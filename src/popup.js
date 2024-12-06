@@ -64,12 +64,14 @@ document.addEventListener("DOMContentLoaded", () => {
         button.appendChild(spanNumber);
         button.appendChild(spanTitle);
         button.appendChild(spanDifficulty);
-        // if we wanna add the link -  but i didnot test this locally yet
-        // button.addEventListener("click", function() {
-        //   console.log("Button clicked for problem:", problem);
-        //   console.log("Problem link:", problem.link);
-        //   window.location.href = problem.link;
-        // });      
+
+        // Allow users to be redirected to problem in todo if clicked
+        button.addEventListener("click", function() {
+          console.log("Button clicked for problem:", problem);
+          console.log("Problem link:", problem.link);
+          window.open(problem.link, "_blank");
+        });
+
         button.classList.add("problem-button");
         //for styling purpose
         if (problem.difficulty === "Easy") {
@@ -124,6 +126,14 @@ document.addEventListener("DOMContentLoaded", () => {
         button.appendChild(spanNumber);
         button.appendChild(spanTitle);
         button.appendChild(spanDifficulty);
+
+        // Allow users to be redirected to problem in completed problems if clicked
+        button.addEventListener("click", function() {
+          console.log("Button clicked for problem:", problem);
+          console.log("Problem link:", problem.link);
+          window.open(problem.link, "_blank");
+        });
+
         //for styling purpose
         if (problem.difficulty === "Easy") {
           button.classList.add("easy-difficulty");
