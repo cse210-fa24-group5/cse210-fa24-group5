@@ -197,11 +197,11 @@ describe("Add Drag Listener Functionality", () => {
   beforeEach(() => {
     document.body.innerHTML = "";
   });
-  it("Doesn't add when duplicating", () => {
+  it("Adds listener correctly", () => {
     initializeTimer();
-    expect(addDraggingListeners()).toBe(false);
+    expect(addDraggingListeners()).toBe(True);
   });
-  it("Doesn't add when no element", () => {
+  it("Doesn't add when not needed", () => {
     expect(addDraggingListeners()).toBe(false);
   });
 });
