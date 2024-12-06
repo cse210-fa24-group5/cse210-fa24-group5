@@ -1,12 +1,11 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty } = require("../../src/timer");
+const { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange } = require("../../src/timer");
 const {
   describe,
   beforeEach,
   afterEach,
-  jest,
   it,
   expect,
 } = require("@jest/globals");
@@ -16,6 +15,7 @@ describe("Timer Functionality", () => {
 
   beforeEach(() => {
     // Initialize the timer
+    onUrlChange();
     initializeTimer();
 
     // Get DOM elements
@@ -183,5 +183,8 @@ describe("checkDifficulty Functionality", () => {
 
     // Check if the timer duration is set to 60 minutes for Hard
     expect(countdownElement.textContent).toBe("60:00"); // Hard should be 60:00 (60 minutes)
+  });
+  it("Detects environment correctly", () => {
+    expect(isESModuleSupported()).toBe(true, "The environment should support ES modules");
   });
 });
