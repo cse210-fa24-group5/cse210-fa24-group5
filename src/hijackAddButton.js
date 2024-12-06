@@ -52,6 +52,4 @@ function initializeHijackButton() {
 /**
  * Initialize button on loading problem
  */
-window.onload = function() {
-initializeHijackButton();
-};
+document.addEventListener("DOMContentLoaded", initializeHijackButton);
