@@ -6,7 +6,6 @@ const {
   describe,
   beforeEach,
   afterEach,
-  jest,
   it,
   expect,
 } = require("@jest/globals");
