@@ -199,7 +199,7 @@ describe("Add Drag Listener Functionality", () => {
   });
   it("Adds listener correctly", () => {
     initializeTimer();
-    expect(addDraggingListeners()).toBe(True);
+    expect(addDraggingListeners()).toBe(true);
   });
   it("Doesn't add when not needed", () => {
     expect(addDraggingListeners()).toBe(false);
