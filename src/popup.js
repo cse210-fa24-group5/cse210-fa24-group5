@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderTodoList(container, items) {
     console.log("rendering To-do");
     container.innerHTML = ""; // Clear the existing list
-    if (items.length === 0) {
+    if (items[0] == null) {
       renderEmptyState(container, EMPTY_TODO_MESSAGE);
     }
     else{
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function renderList(container,items){
     console.log("rendering completed problems list");
     container.innerHTML = ""; // Clear the existing list
-    if (items.length === 0) {
+    if (items[0] == null) {
       renderEmptyState(container, EMPTY_COMPLETED_MESSAGE);
     } 
     else{

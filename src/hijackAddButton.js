@@ -52,4 +52,5 @@ function initializeHijackButton() {
 /**
  * Initialize button on loading problem
  */
-document.addEventListener("DOMContentLoaded", initializeHijackButton);
+window.addEventListener("load", initializeHijackButton);
+// document.addEventListener("DOMContentLoaded", initializeHijackButton);
