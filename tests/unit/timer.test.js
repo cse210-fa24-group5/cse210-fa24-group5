@@ -188,52 +188,53 @@ describe("checkDifficulty Functionality", () => {
 
 
 describe("Timer Settings Functionality", () => {
-  let countdownElement, settingsPageButton;
 
-  beforeEach(() => {
-    document.body.innerHTML = `
-      <div class="flexlayout__tab">
-        <div>1
-          <div>2
-            <div>3[0]</div>
-            <div>3[1]
-              <div>Easy</div>
+
+  it("sets the timer duration for Easy difficulty", () => {
+    let countdownElement, settingsPageButton;
+
+
+      document.body.innerHTML = `
+        <div class="flexlayout__tab">
+          <div>1
+            <div>2
+              <div>3[0]</div>
+              <div>3[1]
+                <div>Easy</div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `;
-
-    global.chrome = {
-      storage: {
-        local: {
-          data: {},
+      `;
   
-          // Mock 'get' method
-          get: jest.fn((keys, callback) => {
-            callback(chrome.storage.local.data);  // Return mocked data
-          }),
-  
-          // Mock 'set' method
-          set: jest.fn((items, callback) => {
-            chrome.storage.local.data = { ...chrome.storage.local.data, ...items };  // Update the mock data
-            callback && callback();  // Optional callback
-          }),
+      global.chrome = {
+        storage: {
+          local: {
+            data: {},
+    
+            // Mock 'get' method
+            get: jest.fn((keys, callback) => {
+              callback(chrome.storage.local.data);  // Return mocked data
+            }),
+    
+            // Mock 'set' method
+            set: jest.fn((items, callback) => {
+              chrome.storage.local.data = { ...chrome.storage.local.data, ...items };  // Update the mock data
+              callback && callback();  // Optional callback
+            }),
+          },
         },
-      },
-    };
+      };
+  
+      jest.spyOn(window, "alert").mockImplementation(() => {});
+  
+      // Initialize the timer
+      initializeTimer();
+  
+      // Get DOM elements
+      countdownElement = document.getElementById("countdown");
+      settingsPageButton = document.getElementById("settingPageButton");
 
-    jest.spyOn(window, "alert").mockImplementation(() => {});
-
-    // Initialize the timer
-    initializeTimer();
-
-    // Get DOM elements
-    countdownElement = document.getElementById("countdown");
-    settingsPageButton = document.getElementById("settingPageButton");
-  });
-
-  it("sets the timer duration for Easy difficulty", () => {
 
     settingsPageButton.click();
     let easyField = document.getElementById("easy");
@@ -250,4 +251,129 @@ describe("Timer Settings Functionality", () => {
 
     window.alert.mockRestore();
   });
+  it("sets the timer duration for Medium difficulty", () => {
+    let countdownElement, settingsPageButton;
+
+
+      document.body.innerHTML = `
+        <div class="flexlayout__tab">
+          <div>1
+            <div>2
+              <div>3[0]</div>
+              <div>3[1]
+                <div>Medium</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+  
+      global.chrome = {
+        storage: {
+          local: {
+            data: {},
+    
+            // Mock 'get' method
+            get: jest.fn((keys, callback) => {
+              callback(chrome.storage.local.data);  // Return mocked data
+            }),
+    
+            // Mock 'set' method
+            set: jest.fn((items, callback) => {
+              chrome.storage.local.data = { ...chrome.storage.local.data, ...items };  // Update the mock data
+              callback && callback();  // Optional callback
+            }),
+          },
+        },
+      };
+  
+      jest.spyOn(window, "alert").mockImplementation(() => {});
+  
+      // Initialize the timer
+      initializeTimer();
+  
+      // Get DOM elements
+      countdownElement = document.getElementById("countdown");
+      settingsPageButton = document.getElementById("settingPageButton");
+    
+
+    settingsPageButton.click();
+    let mediumField = document.getElementById("medium");
+    let submitButton = document.getElementById("submitSettingButton");
+
+    mediumField.value = 5;
+    // Get the submit button and simulate clicking it
+    submitButton.click();
+
+    expect(window.alert).toHaveBeenCalledWith("Settings Saved!");
+    
+    // Perform your assertions
+    expect(countdownElement.textContent).toBe("5:00"); // Adjust this based on your timer format
+
+    window.alert.mockRestore();
+  });
+
+  
+  it("sets the timer duration for Hard difficulty", () => {
+    let countdownElement, settingsPageButton;
+
+
+      document.body.innerHTML = `
+        <div class="flexlayout__tab">
+          <div>1
+            <div>2
+              <div>3[0]</div>
+              <div>3[1]
+                <div>Hard</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+  
+      global.chrome = {
+        storage: {
+          local: {
+            data: {},
+    
+            // Mock 'get' method
+            get: jest.fn((keys, callback) => {
+              callback(chrome.storage.local.data);  // Return mocked data
+            }),
+    
+            // Mock 'set' method
+            set: jest.fn((items, callback) => {
+              chrome.storage.local.data = { ...chrome.storage.local.data, ...items };  // Update the mock data
+              callback && callback();  // Optional callback
+            }),
+          },
+        },
+      };
+  
+      jest.spyOn(window, "alert").mockImplementation(() => {});
+  
+      // Initialize the timer
+      initializeTimer();
+  
+      // Get DOM elements
+      countdownElement = document.getElementById("countdown");
+      settingsPageButton = document.getElementById("settingPageButton");
+
+
+    settingsPageButton.click();
+    let hardField = document.getElementById("hard");
+    let submitButton = document.getElementById("submitSettingButton");
+
+    hardField.value = 5;
+    // Get the submit button and simulate clicking it
+    submitButton.click();
+
+    expect(window.alert).toHaveBeenCalledWith("Settings Saved!");
+    
+    // Perform your assertions
+    expect(countdownElement.textContent).toBe("5:00"); // Adjust this based on your timer format
+
+    window.alert.mockRestore();
+  });
+
 });
