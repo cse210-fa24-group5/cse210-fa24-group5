@@ -160,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initializeStorage()
   fetchAndRender();
-  setInterval(fetchAndRender, 5000);
+  setInterval(fetchAndRender, 60000);
   function isESModuleSupported() {
     try {
       new Function("import('data:text/javascript,export{}')");
