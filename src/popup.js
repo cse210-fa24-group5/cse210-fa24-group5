@@ -1,11 +1,14 @@
 //Displays either todo page or completes list page based on the event trigger source.
-document.getElementById("backToTodo").addEventListener("click", () =>{
-  document.getElementById("completed-page").style.display = "none";
-  document.getElementById("todo-page").style.display = "block";
-});
-document.getElementById("goToCompleted").addEventListener("click", () =>{
-  document.getElementById("todo-page").style.display = "none";
-  document.getElementById("completed-page").style.display = "block";
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("backToTodo").addEventListener("click", () => {
+    document.getElementById("completed-page").style.display = "none";
+    document.getElementById("todo-page").style.display = "block";
+  });
+
+  document.getElementById("goToCompleted").addEventListener("click", () => {
+    document.getElementById("todo-page").style.display = "none";
+    document.getElementById("completed-page").style.display = "block";
+  });
 });
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -32,14 +35,12 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  //fetching the completed and todo-list from storage and rendering them.
-  function fetchAndRender() {
-    chrome.storage.local.get(["completed", "todo"], (result) => {
-      const completed = result.completed || [];
-      let todo = result.todo;
-      renderList(completedList, completed);
-      renderTodoList(todoList, todo);
-    });
+  // renders the empty state of todo/completed list 
+  function renderEmptyState(container, message) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.textContent = message;
+    emptyMessage.classList.add("empty-message");
+    container.appendChild(emptyMessage);
   }
 
   //renders the To-do list elements
@@ -150,27 +151,30 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  // renders the empty state of todo/completed list 
-  function renderEmptyState(container, message) {
-    const emptyMessage = document.createElement("p");
-    emptyMessage.textContent = message;
-    emptyMessage.classList.add("empty-message");
-    container.appendChild(emptyMessage);
+  //fetching the completed and todo-list from storage and rendering them.
+  function fetchAndRender() {
+    chrome.storage.local.get(["completed", "todo"], (result) => {
+      const completed = result.completed || [];
+      const todo = result.todo || [];
+      renderList(completedList, completed);
+      renderTodoList(todoList, todo);
+    });
   }
 
   initializeStorage()
   fetchAndRender();
   setInterval(fetchAndRender, 5000);
-  function isESModuleSupported() {
-    try {
-      new Function("import('data:text/javascript,export{}')");
-      return true;
-    } catch (e) {
-      console.log(e);
-      return false;
-    }
-  }
-  if (isESModuleSupported()) {
-    module.exports = { renderTodoList, renderList, renderEmptyState, initializeStorage, fetchAndRender };
-  }
 });
+
+function isESModuleSupported() {
+  try {
+    new Function("import('data:text/javascript,export{}')");
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+if (isESModuleSupported()) {
+  module.exports = { initializeStorage, fetchAndRender, renderTodoList, renderList };
+}
