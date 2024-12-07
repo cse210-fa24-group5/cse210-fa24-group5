@@ -2,14 +2,14 @@
  * @jest-environment jsdom
  */
 const { initializeTimer, checkDifficulty } = require("../../src/timer");
-const {
-  describe,
-  beforeEach,
-  afterEach,
-  jest,
-  it,
-  expect,
-} = require("@jest/globals");
+// const {
+//   describe,
+//   beforeEach,
+//   afterEach,
+//   jest,
+//   it,
+//   expect,
+// } = require("@jest/globals");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;

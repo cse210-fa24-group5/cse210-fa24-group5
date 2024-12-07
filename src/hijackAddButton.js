@@ -10,7 +10,6 @@ function InformationRetrieval() {
   const problemNumber = problemTextContent.split(". ")[0];
   const problemLink = problemElement.href;
   const problemDifficulty = document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]?.children[1]?.children[0]?.textContent;
-
   return {
     title: problemTitle,
     number: problemNumber,
@@ -79,4 +78,17 @@ function observeProblemPage() {
 }
 
 // Start observing for DOM changes
+function isESModuleSupported() {
+  try {
+    new Function("import('data:text/javascript,export{}')");
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+if (isESModuleSupported()) {
+  module.exports = { InformationRetrieval , initializeHijackButton , observeProblemPage};
+}
 observeProblemPage();
+

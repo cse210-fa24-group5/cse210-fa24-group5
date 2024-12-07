@@ -161,4 +161,16 @@ document.addEventListener("DOMContentLoaded", () => {
   initializeStorage()
   fetchAndRender();
   setInterval(fetchAndRender, 5000);
+  function isESModuleSupported() {
+    try {
+      new Function("import('data:text/javascript,export{}')");
+      return true;
+    } catch (e) {
+      console.log(e);
+      return false;
+    }
+  }
+  if (isESModuleSupported()) {
+    module.exports = { renderTodoList, renderList, renderEmptyState, initializeStorage, fetchAndRender };
+  }
 });
