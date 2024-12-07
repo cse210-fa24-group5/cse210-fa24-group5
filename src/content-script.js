@@ -61,28 +61,45 @@ document.body.addEventListener("click", (event) => {
 });
 
 // Observe for submission results to update storage
-const observer = new MutationObserver((mutations) => {
-  const successMessage = document.querySelector('span[data-e2e-locator="submission-result"]');
-  if (successMessage && successMessage.textContent.includes("Accepted")) {
-    const problemData = InformationRetrieval();
-    if (!problemData) return;
+let handledSubmission = false; 
 
+const observer = new MutationObserver((mutations) => {
+  
+
+  const successMessage = document.querySelector('span[data-e2e-locator="submission-result"]');
+  if (successMessage && successMessage.textContent.includes("Accepted") && !handledSubmission) {
+    handledSubmission = true; 
+   
+
+    const problemData = InformationRetrieval();
+    if (!problemData) {
+      
+      return;
+    }
     chrome.storage.local.get(["completed", "todo"], (result) => {
       const completed = result.completed || [];
       const todo = result.todo || [];
-
       if (!completed.some((item) => item.number === problemData.number)) {
         completed.push(problemData);
+      } else {
+        console.log("Problem already exists in completed list.");
       }
 
       const updatedTodo = todo.filter((item) => item.number !== problemData.number);
+  
 
       chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
         console.log("Storage updated: problem moved to completed list.");
       });
     });
+
+    observer.disconnect(); 
+    console.log("Observer disconnected to prevent duplicate processing.");
+  } else if (handledSubmission) {
+    console.log("Submission already handled. Skipping.");
   }
 });
+
 
 // Initialize problem auto-save and observe DOM changes
 autoSaveProblemDetails();
