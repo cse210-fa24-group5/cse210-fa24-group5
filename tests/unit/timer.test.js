@@ -85,6 +85,63 @@ describe("Timer Functionality", () => {
     // Restore the original alert function
     window.alert.mockRestore();
   });
+  
+  it("alerts when timer settings change is made", () => {
+    let countdownElement, settingsPageButton;
+
+
+      document.body.innerHTML = `
+        <div class="flexlayout__tab">
+          <div>1
+            <div>2
+              <div>3[0]</div>
+              <div>3[1]
+                <div>Easy</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      `;
+  
+      global.chrome = {
+        storage: {
+          local: {
+            data: {},
+    
+            // Mock 'get' method
+            get: jest.fn((keys, callback) => {
+              callback(chrome.storage.local.data);  // Return mocked data
+            }),
+    
+            // Mock 'set' method
+            set: jest.fn((items, callback) => {
+              chrome.storage.local.data = { ...chrome.storage.local.data, ...items };  // Update the mock data
+              callback && callback();  // Optional callback
+            }),
+          },
+        },
+      };
+  
+      jest.spyOn(window, "alert").mockImplementation(() => {});
+  
+      // Initialize the timer
+      initializeTimer();
+  
+      // Get DOM elements
+      countdownElement = document.getElementById("countdown");
+      settingsPageButton = document.getElementById("settingPageButton");
+
+
+    settingsPageButton.click();
+    let easyField = document.getElementById("easy");
+    let submitButton = document.getElementById("submitSettingButton");
+
+    easyField.value = 5;
+    // Get the submit button and simulate clicking it
+    submitButton.click();
+
+    expect(window.alert).toHaveBeenCalledWith("Settings Saved!");
+    });
 });
 
 describe("checkDifficulty Functionality", () => {
@@ -251,6 +308,7 @@ describe("Timer Settings Functionality", () => {
 
     window.alert.mockRestore();
   });
+
   it("sets the timer duration for Medium difficulty", () => {
     let countdownElement, settingsPageButton;
 
@@ -312,6 +370,8 @@ describe("Timer Settings Functionality", () => {
 
     window.alert.mockRestore();
   });
+  
+ 
 
   
   it("sets the timer duration for Hard difficulty", () => {
