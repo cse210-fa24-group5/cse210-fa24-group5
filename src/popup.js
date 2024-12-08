@@ -1,3 +1,6 @@
+/**
+ *initialise storage if empty lists 
+ */
 function initializeStorage() {
   chrome.storage.local.get(["completed"], (result) => {
     if (!result.completed) {
@@ -15,7 +18,9 @@ function initializeStorage() {
   });
 }
 
-// renders the empty state of todo/completed list 
+/**
+ * renders the empty state of todo/completed list 
+ */
 function renderEmptyState(container, message) {
   const emptyMessage = document.createElement("p");
   emptyMessage.textContent = message;
@@ -23,11 +28,13 @@ function renderEmptyState(container, message) {
   container.appendChild(emptyMessage);
 }
 
-//renders the To-do list elements
+/**
+ * renders the To-do list elements
+ */
 function renderTodoList(container, items) {
   const EMPTY_TODO_MESSAGE = "No tasks in your To-Do list!";
   console.log("rendering To-do");
-  container.innerHTML = ""; // Clear the existing list
+  container.innerHTML = ""; 
   if (items[0] == null) {
     renderEmptyState(container, EMPTY_TODO_MESSAGE);
   }
@@ -47,7 +54,7 @@ function renderTodoList(container, items) {
       button.appendChild(spanTitle);
       button.appendChild(spanDifficulty);
 
-      // Allow users to be redirected to problem in todo if clicked
+      //Allow users to be redirected to problem in todo if clicked
       button.addEventListener("click", function() {
         console.log("Button clicked for problem:", problem);
         console.log("Problem link:", problem.link);
@@ -86,7 +93,9 @@ function renderTodoList(container, items) {
   }
 };
 
-//Renders the completed list items
+/**
+ * Renders the completed list items
+ */
 function renderList(container,items){
   const EMPTY_COMPLETED_MESSAGE = "No tasks completed yet!";
   console.log("rendering completed problems list");
@@ -110,7 +119,7 @@ function renderList(container,items){
       button.appendChild(spanTitle);
       button.appendChild(spanDifficulty);
 
-      // Allow users to be redirected to problem in completed problems if clicked
+      // Allow users to be redirected to problem page in completed problems, if clicked
       button.addEventListener("click", function() {
         console.log("Button clicked for problem:", problem);
         console.log("Problem link:", problem.link);
@@ -133,7 +142,9 @@ function renderList(container,items){
   }
 };
 
-//fetching the completed and todo-list from storage and rendering them.
+/**
+ * fetching the completed and todo-list from storage and rendering them.
+ */
 function fetchAndRender() {
   const completedList = document.getElementById("completed-list");
   const todoList = document.getElementById("todo-list");
@@ -145,7 +156,9 @@ function fetchAndRender() {
   });
 }
 
-//Displays either todo page or completes list page based on the event trigger source.
+/**
+ * Displays either todo page or completes list page based on the event trigger source.
+ */
 document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("backToTodo").addEventListener("click", () => {
     document.getElementById("completed-page").style.display = "none";

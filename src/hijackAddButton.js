@@ -77,7 +77,9 @@ function observeProblemPage() {
   observer.observe(targetNode, config);
 }
 
-// Start observing for DOM changes
+/**
+ *  Start observing for DOM changes
+ */
 function isESModuleSupported() {
   try {
     new Function("import('data:text/javascript,export{}')");

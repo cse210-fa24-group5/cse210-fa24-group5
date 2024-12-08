@@ -1,4 +1,6 @@
-// Function to retrieve problem details from the LeetCode page
+/**
+ *  Function to retrieve problem details from the LeetCode page
+ */
 function InformationRetrieval() {
   const flexTab = document.querySelector(`.flexlayout__tab`);
   const problemElement = flexTab?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0];
@@ -27,7 +29,9 @@ function InformationRetrieval() {
   };
 }
 
-// Function to save problem details to local storage
+/**
+ *  Function to save problem details to local storage
+ */
 function saveProblemDetails() {
   const problemData = InformationRetrieval();
   if (!problemData) return;
@@ -37,7 +41,9 @@ function saveProblemDetails() {
   });
 }
 
-// Function to automatically save problem details when the page updates
+/** 
+ * Function to automatically save problem details when the page updates 
+ */
 function autoSaveProblemDetails() {
   saveProblemDetails();
 
@@ -52,7 +58,9 @@ function autoSaveProblemDetails() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// Event listener for problem submission
+/**
+ *  Event listener for problem submission
+ */
 document.body.addEventListener("click", (event) => {
   const submitButton = event.target.closest("button");
   if (submitButton && submitButton.textContent.includes("Submit")) {
@@ -60,7 +68,9 @@ document.body.addEventListener("click", (event) => {
   }
 });
 
-// Observe for submission results to update storage
+/**
+ * Observe for submission results to update storage
+ */
 let handledSubmission = false; 
 
 const observer = new MutationObserver((mutations) => {
@@ -101,6 +111,8 @@ const observer = new MutationObserver((mutations) => {
 });
 
 
-// Initialize problem auto-save and observe DOM changes
+/**
+ * Initialize problem auto-save and observe DOM changes
+ */
 autoSaveProblemDetails();
 observer.observe(document.body, { childList: true, subtree: true });
