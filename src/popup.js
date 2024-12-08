@@ -26,6 +26,7 @@ function renderEmptyState(container, message) {
 
 //renders the To-do list elements
 function renderTodoList(container, items) {
+  const EMPTY_TODO_MESSAGE = "No tasks in your To-Do list!";
   console.log("rendering To-do");
   container.innerHTML = ""; // Clear the existing list
   if (items[0] == null) {
@@ -88,6 +89,7 @@ function renderTodoList(container, items) {
 
 //Renders the completed list items
 function renderList(container,items){
+  const EMPTY_COMPLETED_MESSAGE = "No tasks completed yet!";
   console.log("rendering completed problems list");
   container.innerHTML = ""; // Clear the existing list
   if (items[0] == null) {
@@ -134,6 +136,8 @@ function renderList(container,items){
 
 //fetching the completed and todo-list from storage and rendering them.
 function fetchAndRender() {
+  const completedList = document.getElementById("completed-list");
+  const todoList = document.getElementById("todo-list");
   chrome.storage.local.get(["completed", "todo"], (result) => {
     const completed = result.completed || [];
     const todo = result.todo || [];
@@ -156,12 +160,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  const completedList = document.getElementById("completed-list");
-  const todoList = document.getElementById("todo-list");
-
-  const EMPTY_TODO_MESSAGE = "No tasks in your To-Do list!";
-  const EMPTY_COMPLETED_MESSAGE = "No tasks completed yet!";
-
   initializeStorage()
   fetchAndRender();
   setInterval(fetchAndRender, 5000);
