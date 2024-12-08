@@ -103,4 +103,5 @@ const observer = new MutationObserver((mutations) => {
 
 // Initialize problem auto-save and observe DOM changes
 autoSaveProblemDetails();
+module.exports = { InformationRetrieval , saveProblemDetails , autoSaveProblemDetails};
 observer.observe(document.body, { childList: true, subtree: true });

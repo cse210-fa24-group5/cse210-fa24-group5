@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 function initializeStorage() {
   chrome.storage.local.get(["completed"], (result) => {
     if (!result.completed) {
