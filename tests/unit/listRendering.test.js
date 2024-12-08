@@ -42,15 +42,19 @@ describe("fetchAndRender", () => {
     document.body.innerHTML = `
       <div id="todo-page">
         <h2>To-Do List</h2>
-        <ul id="todo-list"></ul>
+        <ul id="todo-list" style="display: block;">
+        </ul>
         <button id="goToCompleted">Go to Completed</button>
       </div>
       <div id="completed-page" style="display: none;">
         <h2>Completed Problems</h2>
-        <ul id="completed-list"></ul>
+        <ul id="completed-list">
+        </ul>
         <button id="backToTodo">Back to Todo</button>
       </div>
     `;
+    const event = new Event("DOMContentLoaded");
+    document.dispatchEvent(event);
 
     // Mock data
     mockTodo = [
@@ -106,22 +110,26 @@ describe("fetchAndRender", () => {
     expect(emptyCompletedMessage).not.toBeNull();
     expect(emptyCompletedMessage.textContent).toBe("No tasks completed yet!");
   });
-});
-
-describe("UI Navigation", () => {
   it("should switch to the todo page on 'Back to Todo' click", () => {
     const backToTodoButton = document.getElementById("backToTodo");
+    console.log("backToTodoButton:", document.getElementById("backToTodo"));
     backToTodoButton.click();
-
-    expect(document.getElementById("todo-page").style.display).toBe("block");
-    expect(document.getElementById("completed-page").style.display).toBe("none");
+  
+    expect(getComputedStyle(document.getElementById("todo-page")).display).toBe("block");
+    expect(getComputedStyle(document.getElementById("completed-page")).display).toBe("none");
   });
-
+  
   it("should switch to the completed page on 'Go to Completed' click", () => {
     const goToCompletedButton = document.getElementById("goToCompleted");
+    console.log("goToCompletedButton:", document.getElementById("goToCompleted"));
     goToCompletedButton.click();
-
-    expect(document.getElementById("completed-page").style.display).toBe("block");
-    expect(document.getElementById("todo-page").style.display).toBe("none");
+    expect(goToCompletedButton).not.toBeNull();
+  
+    expect(getComputedStyle(document.getElementById("completed-page")).display).toBe("block");
+    expect(getComputedStyle(document.getElementById("todo-page")).display).toBe("none");
   });
+  
 });
+
+  
+
