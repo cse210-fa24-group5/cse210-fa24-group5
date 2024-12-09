@@ -91,6 +91,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     });
 
     console.log("Waiting for add-to-do button...");
+    await timeout(2000);
     await page.waitForSelector(".add-todo-btn");
     console.log( "Got the add-to-do button... ");
     console.log("Clicking the add-to-do button...");
