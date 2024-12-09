@@ -19,7 +19,7 @@ describe("LeetCode Timer Overlay Testing", () => {
   let browser;
   let page;
   let pages;
-  const extensionPath = path.join(process.cwd(), "src"); // Path to extension
+  const extensionPath = path.join(process.cwd(), "src");
 
   beforeAll(async () => {
     // Launch browser with extension loaded
@@ -47,10 +47,15 @@ describe("LeetCode Timer Overlay Testing", () => {
 
   beforeEach(async () => {
     // Optionally you can clear any previous state here
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForSelector("#timer-overlay");
   });
 
   afterEach(async () => {
-    // Optionally close any pages or clear session after each test
+     // Optionally close any pages or clear session after each test
+    await page.evaluate(() => {
+      window.localStorage.clear();
+    });
   });
 
   afterAll(async () => {
@@ -60,7 +65,7 @@ describe("LeetCode Timer Overlay Testing", () => {
   test("Timer is present on LeetCode problem page", async () => {
     // Check if the timer element is present on the page
     const timerExists = (await page.$("#timer-overlay")) !== null;
-    expect(timerExists).toBe(true); // The timer overlay should be on the page
+    expect(timerExists).toBe(true);
   });
 
   test("Timer countdown starts correctly on LeetCode problem page", async () => {
@@ -71,7 +76,7 @@ describe("LeetCode Timer Overlay Testing", () => {
     // Check if the countdown value has changed (timer should start decreasing)
     const countdownText = await page.$eval(
       "#countdown",
-      (el) => el.textContent,
+      (el) => el.textContent
     );
     expect(countdownText).not.toBe("0:04"); // Assuming the timer started with 04:00
   });
@@ -87,7 +92,7 @@ describe("LeetCode Timer Overlay Testing", () => {
     // Verify the timer has reset to the default value (e.g., '0:04')
     const countdownText = await page.$eval(
       "#countdown",
-      (el) => el.textContent,
+      (el) => el.textContent
     );
     expect(countdownText).toBe("0:04");
   });
@@ -96,7 +101,7 @@ describe("LeetCode Timer Overlay Testing", () => {
     // Check if the timer is visible initially
     const isVisibleBefore = await page.$eval(
       "#countdown",
-      (el) => window.getComputedStyle(el).display === "block",
+      (el) => window.getComputedStyle(el).display === "block"
     );
     expect(isVisibleBefore).toBe(true);
 
@@ -106,7 +111,7 @@ describe("LeetCode Timer Overlay Testing", () => {
     // Check if the timer is now hidden
     const isVisibleAfterHide = await page.$eval(
       "#countdown",
-      (el) => window.getComputedStyle(el).display === "none",
+      (el) => window.getComputedStyle(el).display === "none"
     );
     expect(isVisibleAfterHide).toBe(true);
 
@@ -116,14 +121,15 @@ describe("LeetCode Timer Overlay Testing", () => {
     // Check if the timer is visible again
     const isVisibleAfterShow = await page.$eval(
       "#countdown",
-      (el) => window.getComputedStyle(el).display === "block",
+      (el) => window.getComputedStyle(el).display === "block"
     );
     expect(isVisibleAfterShow).toBe(true);
   });
+
   test("Timer triggers alert when reaching zero", async () => {
     // Set up a listener for the alert dialog
     let alertMessage = null;
-    page.on("dialog", async (dialog) => {
+    page.once("dialog", async (dialog) => {
       alertMessage = dialog.message();
       await dialog.dismiss(); // Dismiss the alert to avoid blocking the test
     });
@@ -138,12 +144,29 @@ describe("LeetCode Timer Overlay Testing", () => {
     await timeout(4200);
 
     // Check if the alert appears
-    page.on("dialog", async (dialog) => {
-      expect(dialog.message()).toBe("Time is up!"); // Assuming the alert says "Time is up!"
+    // page.on("dialog", async (dialog) => {
+    //   expect(dialog.message()).toBe("Time is up!"); // Assuming the alert says "Time is up!"
+    //   await dialog.dismiss();
+    // });
+
+    // Verify that the alert message is correct
+    expect(alertMessage).toBe("Time's up!");
+  }, 10000);
+
+
+  test("Submitting timer settings shows 'Settings Saved!' alert", async () => {
+    let alertShown = false;
+    page.once("dialog", async (dialog) => {
+      expect(dialog.message()).toBe("Settings Saved!");
+      alertShown = true;
       await dialog.dismiss();
     });
 
-    // Verify that the alert message is correct
-    expect(alertMessage).toBe("Time's up!"); // Replace with the actual alert message in your code
-  }, 10000);
+    await page.click("#settingPageButton");
+    await page.click("#submitSettingButton");
+
+    await timeout(1000);
+
+    expect(alertShown).toBe(true);
+  });
 });
