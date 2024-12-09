@@ -12,7 +12,7 @@ function InformationRetrieval() {
       "Problem element not found. The DOM structure may have changed or not loaded yet.",
     );
     return null;
-  }
+}
 
   const problemTextContent = problemElement.textContent || "";
   const problemTitle = problemTextContent.split(". ")[1];
@@ -52,7 +52,6 @@ function saveProblemDetails() {
  */
 function autoSaveProblemDetails() {
   saveProblemDetails();
-
   const observer = new MutationObserver(() => {
     const titleElement = document.querySelector(
       'a.no-underline[href^="/problems/"]',
@@ -62,7 +61,6 @@ function autoSaveProblemDetails() {
       observer.disconnect();
     }
   });
-
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
@@ -105,7 +103,6 @@ const observer = new MutationObserver((mutations) => {
       } else {
         console.log("Problem already exists in completed list.");
       }
-
       const updatedTodo = todo.filter(
         (item) => item.number !== problemData.number,
       );
@@ -114,7 +111,6 @@ const observer = new MutationObserver((mutations) => {
         console.log("Storage updated: problem moved to completed list.");
       });
     });
-
     observer.disconnect();
     console.log("Observer disconnected to prevent duplicate processing.");
   } else if (handledSubmission) {
