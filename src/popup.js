@@ -84,8 +84,12 @@ function renderTodoList(container, items) {
             fetchAndRender();
           });
         });
-      });
 
+        const li = document.createElement("li");
+        li.appendChild(button);
+        li.appendChild(removeButton);
+        container.appendChild(li);
+      });
       const li = document.createElement("li");
       li.appendChild(button);
       li.appendChild(removeButton);
@@ -172,6 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
+
   initializeStorage();
   fetchAndRender();
   setInterval(fetchAndRender, 5000);
