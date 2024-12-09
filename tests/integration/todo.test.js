@@ -18,7 +18,6 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
   let browser;
   let pages;
   let page;
-  let extensionPage;
   let extensionId;
   let todoListSelector;
 
@@ -27,17 +26,28 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
   beforeAll(async () => {
     // Launch browser with extension loaded
     browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: [
         `--disable-extensions-except=${extensionPath}`,
         `--load-extension=${extensionPath}`,
         "--no-sandbox",
+        "--disable-setuid-sandbox",
+        "--disable-dev-shm-usage",
+        "--disable-web-security",
+        "--disable-features=IsolateOrigins,site-per-process",
+        "--window-size=1920,1080",
       ],
+      defaultViewport: null,
     });
-
     // Get the extension id
     pages = await browser.pages();
     page = pages[0];
+    const userAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
+    await page.setUserAgent(userAgent);
+    await page.setExtraHTTPHeaders({
+    "Accept-Language": "en-US,en;q=0.9",
+    });
     await page.goto("chrome://extensions/");
     await page.waitForSelector("extensions-manager");
 
@@ -62,33 +72,47 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
       );
       return extension.getAttribute("id");
     }, extensionName);
+    console.log("Extension loaded with ID:", extensionId);
   });
 
   beforeEach(async () => {
     //Clicking the plus button adds the problem to the To-Do list
     // Navigate to LeetCode problem page
-    pages = await browser.pages();
-    page = pages[0];
+    page = await browser.newPage(); // Ensure a fresh page is initialized
+    const userAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
+    await page.setUserAgent(userAgent);
+    await page.setExtraHTTPHeaders({
+    "Accept-Language": "en-US,en;q=0.9",
+    });
+    console.log("Navigating to LeetCode problem page...");
     await page.goto("https://leetcode.com/problems/two-sum/description/", {
       waitUntil: "domcontentloaded",
     });
 
+    console.log("Waiting for add-to-do button...");
     await page.waitForSelector(".add-todo-btn");
+    console.log("Clicking the add-to-do button...");
     await page.click(".add-todo-btn");
 
     await timeout(2000);
-    extensionPage = await browser.newPage(); // Initialize extensionPage as a new page
-    await extensionPage.goto(`chrome-extension://${extensionId}/hello.html`, {
+    console.log("Opening extension page...");
+    // extensionPage = await browser.newPage();// Initialize extensionPage as a new page 
+    await page.goto(`chrome-extension://${extensionId}/hello.html`, {
       waitUntil: "domcontentloaded",
     });
+    console.log("Waiting for #todo-list");
     todoListSelector = "#todo-list";
-    await extensionPage.waitForSelector(todoListSelector);
+    await page.waitForSelector(todoListSelector);
   }, 15000);
 
   afterEach(async () => {
     // Close the extension page after each test
-    if (extensionPage) {
-      await extensionPage.close();
+    const pages = await browser.pages();
+    for (const openPage of pages) {
+    if (!(await openPage.isClosed())) {
+      await openPage.close(); // Close each open page
+      }
     }
   });
 
@@ -98,7 +122,8 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
 
   test("Clicking the problem in the list opens the problem", async () => {
     // Extract and verify the To-Do list items
-    const todoItems = await extensionPage.$$eval(
+    console.log("Extract and verify the To-Do list items")
+    const todoItems = await page.$$eval(
       `${todoListSelector} > li`,
       (listItems) =>
         listItems.map((item) => {
@@ -113,6 +138,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     );
 
     // Check if the problem is added to the To-Do list
+    console.log("Check if the problem is added to the To-Do list")
     const problemExists = todoItems.some(
       (item) =>
         item.number === "1" &&
@@ -122,24 +148,28 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
 
     expect(problemExists).toBe(true);
     const newPagePromise = new Promise((resolve) => {
-      const handleTargetCreated = async (target) => {
+      browser.once("targetcreated", async (target) => {
         const newPage = await target.page();
-        if (newPage) {
-          resolve(newPage);
-          browser.off("targetcreated", handleTargetCreated);
-        }
-      };
-      browser.once("targetcreated", handleTargetCreated);
+        resolve(newPage);
+      });
     });
 
-    // Click on the problem button
+    // Click on the problem button to open it in a new tab
+    console.log("Click on the problem button to open it in a new tab")
     const problemLinkSelector = `${todoListSelector} > li .problem-button`;
-    await extensionPage.click(problemLinkSelector);
+    await page.click(problemLinkSelector);
 
     const newPage = await newPagePromise;
+    const userAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
+    await newPage.setUserAgent(userAgent);
+    await newPage.setExtraHTTPHeaders({
+    "Accept-Language": "en-US,en;q=0.9",
+    });
     await newPage.waitForNavigation({ waitUntil: "domcontentloaded" });
 
     // Verify the URL of the new page
+    console.log("Verify the URL of the new page");  
     const currentUrl = newPage.url();
     expect(currentUrl).toBe("https://leetcode.com/problems/two-sum/");
     await newPage.close();
@@ -147,13 +177,15 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
 
   test("Clicking the remove button in the list removes the problem from the list", async () => {
     const removeButtonSelector = `${todoListSelector} > li .remove-button`;
-    await extensionPage.click(removeButtonSelector);
+    await page.click(removeButtonSelector);
 
     // Wait for the change in the To-Do list
-    await timeout(2000);
+    console.log("Wait for the change in the To-Do list")
+    await page.waitForSelector(todoListSelector);
 
     // Verify the problem is removed from the To-Do list
-    const updatedTodoItems = await extensionPage.$$eval(
+    console.log("Verify the problem is removed from the To-Do list")
+    const updatedTodoItems = await page.$$eval(
       `${todoListSelector} > li`,
       (listItems) =>
         listItems.map((item) => {

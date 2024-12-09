@@ -112,7 +112,6 @@ describe("fetchAndRender", () => {
   });
   it("should switch to the todo page on 'Back to Todo' click", () => {
     const backToTodoButton = document.getElementById("backToTodo");
-    console.log("backToTodoButton:", document.getElementById("backToTodo"));
     backToTodoButton.click();
   
     expect(getComputedStyle(document.getElementById("todo-page")).display).toBe("block");
@@ -121,7 +120,6 @@ describe("fetchAndRender", () => {
   
   it("should switch to the completed page on 'Go to Completed' click", () => {
     const goToCompletedButton = document.getElementById("goToCompleted");
-    console.log("goToCompletedButton:", document.getElementById("goToCompleted"));
     goToCompletedButton.click();
     expect(goToCompletedButton).not.toBeNull();
   
