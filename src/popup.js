@@ -1,95 +1,172 @@
+//Displays either todo page or completes list page based on the event trigger source.
+document.getElementById("backToTodo").addEventListener("click", () => {
+  document.getElementById("completed-page").style.display = "none";
+  document.getElementById("todo-page").style.display = "block";
+});
+document.getElementById("goToCompleted").addEventListener("click", () => {
+  document.getElementById("todo-page").style.display = "none";
+  document.getElementById("completed-page").style.display = "block";
+});
+
 document.addEventListener("DOMContentLoaded", () => {
-  // 获取任务列表和输入框、按钮
   const completedList = document.getElementById("completed-list");
   const todoList = document.getElementById("todo-list");
-  const newTaskInput = document.getElementById("new-task"); // 获取输入框
-  const addTaskButton = document.getElementById("add-task"); // 获取加号按钮
 
-  const initialTodo = [
-    "Two Sum",
-    "Reverse Linked List",
-    "Binary Search",
-    "Merge Intervals",
-    "Longest Substring Without Repeating Characters",
-  ];
+  const EMPTY_TODO_MESSAGE = "No tasks in your To-Do list!";
+  const EMPTY_COMPLETED_MESSAGE = "No tasks completed yet!";
 
-  // 初始化并渲染任务列表
+  function initializeStorage() {
+    chrome.storage.local.get(["completed"], (result) => {
+      if (!result.completed) {
+        chrome.storage.local.set({ completed: [] }, () => {
+          console.log("Storage initialized with empty completed lists.");
+        });
+      }
+    });
+    chrome.storage.local.get(["todo"], (result) => {
+      if (!result.todo) {
+        chrome.storage.local.set({ todo: [] }, () => {
+          console.log("Storage initialized with empty todo lists.");
+        });
+      }
+    });
+    chrome.storage.local.get(["mins"], (result) => {
+      if (!result.mins) {
+        chrome.storage.local.set({ mins: [20, 40, 60] }, () => {
+          console.log("Storage initialized with 20, 40, 60 minutes.");
+        });
+      }
+    });
+  }
+
+  //fetching the completed and todo-list from storage and rendering them.
   function fetchAndRender() {
     chrome.storage.local.get(["completed", "todo"], (result) => {
       const completed = result.completed || [];
       let todo = result.todo;
-
-      if (!todo) {
-        todo = initialTodo;
-        chrome.storage.local.set({ todo });
-      }
-
-      // eslint-disable-next-line no-use-before-define
       renderList(completedList, completed);
-      // eslint-disable-next-line no-use-before-define
-      renderList(todoList, todo);
+      renderTodoList(todoList, todo);
     });
   }
 
-  function renderList(container, items) {
-    console.log("rendering");
-    container.innerHTML = "";
-    items.forEach((item) => {
-      const li = document.createElement("li");
-      li.textContent = item;
-      li.id = item;
-      let removeButton = document.createElement("button");
-      removeButton.textContent = "x";
+  //renders the To-do list elements
+  function renderTodoList(container, items) {
+    console.log("rendering To-do");
+    container.innerHTML = ""; // Clear the existing list
+    if (items.length === 0) {
+      renderEmptyState(container, EMPTY_TODO_MESSAGE);
+    } else {
+      items.forEach((problem) => {
+        //created span elements for better CSS handling
+        const spanTitle = document.createElement("span");
+        const spanNumber = document.createElement("span");
+        const spanDifficulty = document.createElement("span");
 
-      //removeButton.classList.add(); <-- add a css style if we want
-      removeButton.addEventListener("click", () => {
-        chrome.storage.local.get(["todo"], (result) => {
-          const todo = result.todo || [];
-          const updatedTodo = todo.filter((currItem) => currItem !== item);
+        spanTitle.textContent = problem.title;
+        spanNumber.textContent = problem.number;
+        spanDifficulty.textContent = problem.difficulty;
 
-          chrome.storage.local.set({ todo: updatedTodo }, () => {
-            console.log("Storage updated successfully.");
+        const button = document.createElement("button");
+        button.appendChild(spanNumber);
+        button.appendChild(spanTitle);
+        button.appendChild(spanDifficulty);
 
-            fetchAndRender();
+        // Allow users to be redirected to problem in todo if clicked
+        button.addEventListener("click", function () {
+          console.log("Button clicked for problem:", problem);
+          console.log("Problem link:", problem.link);
+          window.open(problem.link, "_blank");
+        });
+
+        button.classList.add("problem-button");
+        //for styling purpose
+        if (problem.difficulty === "Easy") {
+          button.classList.add("easy-difficulty");
+        } else if (problem.difficulty === "Medium") {
+          button.classList.add("medium-difficulty");
+        } else if (problem.difficulty === "Hard") {
+          button.classList.add("hard-difficulty");
+        }
+        const removeButton = document.createElement("button");
+        removeButton.textContent = "x";
+        removeButton.classList.add("remove-button");
+        removeButton.addEventListener("click", () => {
+          chrome.storage.local.get(["todo"], (result) => {
+            const todo = result.todo || [];
+            const updatedTodo = todo.filter(
+              (currItem) =>
+                JSON.stringify(currItem) !== JSON.stringify(problem),
+            );
+
+            chrome.storage.local.set({ todo: updatedTodo }, () => {
+              console.log("Storage updated successfully.");
+              fetchAndRender();
+            });
           });
         });
+
+        const li = document.createElement("li");
+        li.appendChild(button);
+        li.appendChild(removeButton);
+        container.appendChild(li);
       });
-      li.appendChild(removeButton);
-      container.appendChild(li);
-    });
+    }
   }
 
-  // 添加新任务到 To-Do List
-  addTaskButton.addEventListener("click", () => {
-    const newTask = newTaskInput.value.trim(); // 获取输入框中的值
-    if (newTask) {
-      chrome.storage.local.get(["todo"], (result) => {
-        const todo = result.todo || [];
-        if (!todo.includes(newTask)) {
-          todo.push(newTask); // 添加新任务
-          chrome.storage.local.set({ todo }, () => {
-            console.log("New task added:", newTask);
-            renderList(todoList, todo); // 更新显示
-          });
-        } else {
-          alert("Task already exists!"); // 防止重复任务
-        }
-      });
-      newTaskInput.value = ""; // 清空输入框
+  //Renders the completed list items
+  function renderList(container, items) {
+    console.log("rendering completed problems list");
+    container.innerHTML = ""; // Clear the existing list
+    if (items.length === 0) {
+      renderEmptyState(container, EMPTY_COMPLETED_MESSAGE);
     } else {
-      alert("Please enter a task!"); // 提示用户输入
-    }
-  });
+      items.forEach((problem) => {
+        //created span elements for better CSS handling
+        const spanTitle = document.createElement("span");
+        const spanNumber = document.createElement("span");
+        const spanDifficulty = document.createElement("span");
 
-  // 支持按回车键添加任务
-  newTaskInput.addEventListener("keyup", (event) => {
-    if (event.key === "Enter") {
-      addTaskButton.click(); // 模拟点击加号按钮
-    }
-  });
+        spanTitle.textContent = problem.title;
+        spanNumber.textContent = problem.number;
+        spanDifficulty.textContent = problem.difficulty;
 
+        const button = document.createElement("button");
+        button.appendChild(spanNumber);
+        button.appendChild(spanTitle);
+        button.appendChild(spanDifficulty);
+
+        // Allow users to be redirected to problem in completed problems if clicked
+        button.addEventListener("click", function () {
+          console.log("Button clicked for problem:", problem);
+          console.log("Problem link:", problem.link);
+          window.open(problem.link, "_blank");
+        });
+
+        //for styling purpose
+        if (problem.difficulty === "Easy") {
+          button.classList.add("easy-difficulty");
+        } else if (problem.difficulty === "Medium") {
+          button.classList.add("medium-difficulty");
+        } else if (problem.difficulty === "Hard") {
+          button.classList.add("hard-difficulty");
+        }
+        button.classList.add("problem-button");
+        const li = document.createElement("li");
+        li.appendChild(button);
+        container.appendChild(li);
+      });
+    }
+  }
+
+  // renders the empty state of todo/completed list
+  function renderEmptyState(container, message) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.textContent = message;
+    emptyMessage.classList.add("empty-message");
+    container.appendChild(emptyMessage);
+  }
+
+  initializeStorage();
   fetchAndRender();
-
-  // 每隔5秒刷新一次任务列表
   setInterval(fetchAndRender, 5000);
 });
