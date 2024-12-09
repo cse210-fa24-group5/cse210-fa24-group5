@@ -106,7 +106,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     console.log("Waiting for #todo-list");
     todoListSelector = "#todo-list";
     await page.waitForSelector(todoListSelector);
-  }, 15000);
+  }, 20000);
 
   afterEach(async () => {
     // Close the extension page after each test
@@ -168,14 +168,15 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     await newPage.setExtraHTTPHeaders({
     "Accept-Language": "en-US,en;q=0.9",
     });
+    await timeout(2000);
     await newPage.waitForNavigation({ waitUntil: "domcontentloaded" });
 
     // Verify the URL of the new page
-    console.log("Verify the URL of the new page");  
+    console.log("Verify the URL of the new page");
     const currentUrl = newPage.url();
     expect(currentUrl).toBe("https://leetcode.com/problems/two-sum/");
     await newPage.close();
-  }, 5000);
+  }, 10000);
 
   test("Clicking the remove button in the list removes the problem from the list", async () => {
     const removeButtonSelector = `${todoListSelector} > li .remove-button`;

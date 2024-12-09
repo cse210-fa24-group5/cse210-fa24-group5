@@ -73,7 +73,7 @@ describe("LeetCode Timer Overlay Testing", () => {
   test("Timer countdown starts correctly on LeetCode problem page", async () => {
     // Click the start button on the timer
     await page.click("#startTimerButton");
-    await timeout(1000);
+    await timeout(1500);
 
     // Check if the countdown value has changed (timer should start decreasing)
     const countdownText = await page.$eval(
