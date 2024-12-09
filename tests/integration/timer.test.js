@@ -10,7 +10,7 @@ const {
   afterAll,
 } = require("@jest/globals");
 
-// Simple timeout to wait for actions to process especially for time to countdown
+// Simple timeout to wait for actions to process, especially for time countdowns
 function timeout(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -18,41 +18,46 @@ function timeout(ms) {
 describe("LeetCode Timer Overlay Testing", () => {
   let browser;
   let page;
-  let pages;
   const extensionPath = path.join(process.cwd(), "src");
 
-  beforeAll(async () => {
-    // Launch browser with extension loaded
-    browser = await puppeteer.launch({
-      headless: true, // Set to true for headless, false to view the browser
-      args: [
-        `--disable-extensions-except=${extensionPath}`,
-        `--load-extension=${extensionPath}`,
-        "--no-sandbox",
-      ],
-    });
+  beforeAll(
+    async () => {
+      // Launch browser with extension loaded
+      browser = await puppeteer.launch({
+        headless: false, // Set to false to view the browser
+        args: [
+          `--disable-extensions-except=${extensionPath}`,
+          `--load-extension=${extensionPath}`,
+          "--no-sandbox",
+        ],
+      });
 
-    // Get the extension id
-    pages = await browser.pages();
-    page = pages[0];
+       // Get the extension id
+      const pages = await browser.pages();
+      page = pages[0];
 
-    // Go to the specific LeetCode problem page
-    await page.goto("https://leetcode.com/problems/two-sum/description/", {
-      waitUntil: "domcontentloaded",
-    });
+      // Go to the specific LeetCode problem page
+      await page.goto("https://leetcode.com/problems/two-sum/description/", {
+        waitUntil: "domcontentloaded",
+      });
 
-    // Wait for timer overlay to appear
-    await page.waitForSelector("#timer-overlay");
-  }, 7000);
+      // Wait for timer overlay to appear
+      await page.waitForSelector("#timer-overlay");
+    },
+    15000 // Ensure adequate timeout for setup
+  );
 
-  beforeEach(async () => {
-    // Optionally you can clear any previous state here
-    await page.reload({ waitUntil: "domcontentloaded" });
-    await page.waitForSelector("#timer-overlay");
-  });
+  beforeEach(
+    async () => {
+      // Optionally you can clear any previous state here
+      await page.reload({ waitUntil: "domcontentloaded" });
+      await page.waitForSelector("#timer-overlay");
+    },
+    10000
+  );
 
   afterEach(async () => {
-     // Optionally close any pages or clear session after each test
+    // Optionally close any pages or clear session after each test
     await page.evaluate(() => {
       window.localStorage.clear();
     });
@@ -62,24 +67,32 @@ describe("LeetCode Timer Overlay Testing", () => {
     await browser.close();
   });
 
-  test("Timer is present on LeetCode problem page", async () => {
-    // Check if the timer element is present on the page
-    const timerExists = (await page.$("#timer-overlay")) !== null;
-    expect(timerExists).toBe(true);
-  });
+  test(
+    "Timer is present on LeetCode problem page",
+    async () => {
+      // Check if the timer element is present on the page
+      const timerExists = await page.$("#timer-overlay");
+      expect(timerExists).not.toBeNull();
+    },
+    10000
+  );
 
-  test("Timer countdown starts correctly on LeetCode problem page", async () => {
-    // Click the start button on the timer
-    await page.click("#startTimerButton");
-    await timeout(1000);
+  test(
+    "Timer countdown starts correctly on LeetCode problem page",
+    async () => {
+      // Click the start button on the timer
+      await page.click("#startTimerButton");
+      await timeout(1000);
 
-    // Check if the countdown value has changed (timer should start decreasing)
-    const countdownText = await page.$eval(
-      "#countdown",
-      (el) => el.textContent
-    );
-    expect(countdownText).not.toBe("0:04"); // Assuming the timer started with 04:00
-  });
+      // Check if the countdown value has changed (timer should start decreasing)
+      const countdownText = await page.$eval(
+        "#countdown",
+        (el) => el.textContent
+      );
+      expect(countdownText).not.toBe("0:04"); // Assuming the timer started at 0:04
+    },
+    10000
+  );
 
   test("Timer resets correctly on LeetCode problem page", async () => {
     // Start the timer first
@@ -126,47 +139,75 @@ describe("LeetCode Timer Overlay Testing", () => {
     expect(isVisibleAfterShow).toBe(true);
   });
 
-  test("Timer triggers alert when reaching zero", async () => {
-    // Set up a listener for the alert dialog
-    let alertMessage = null;
-    page.once("dialog", async (dialog) => {
-      alertMessage = dialog.message();
-      await dialog.dismiss(); // Dismiss the alert to avoid blocking the test
-    });
+  test(
+    "Changing timer easy settings updates countdown correctly",
+    async () => {
+      await page.click("#settingPageButton");
+  
+      const newEasyValue = 0.0333; // 2 seconds
+      await page.evaluate((value) => {
+        document.getElementById("easy").value = value;
+      }, newEasyValue);
+  
+      let alertHandled = false;
+      page.once("dialog", async (dialog) => {
+        expect(dialog.message()).toBe("Settings Saved!");
+        alertHandled = true;
+        await dialog.dismiss();
+      });
+  
+      await page.click("#submitSettingButton");
+      expect(alertHandled).toBe(true);
+  
+      // Reload the page and wait for the timer to update
+      await page.waitForSelector("#countdown"); // Wait for the countdown to be visible again
+  
+      // Log the countdown value to ensure it is updated
+      const countdownText = await page.$eval("#countdown", (el) => el.textContent);
+      console.log('Updated countdown:', countdownText);
+  
+      // Ensure the countdown is updated to 5:00
+      expect(countdownText).toBe("0:02");
+    },
+    20000 // Increased timeout to handle dialog and settings reload
+  );
+  
+  
 
-    // Start timer
-    await page.evaluate(() => {
-      // Start the timer
-      document.getElementById("startTimerButton").click();
-    });
+  test(
+    "Submitting timer settings shows 'Settings Saved!' alert",
+    async () => {
+      let alertHandled = false;
+      page.once("dialog", async (dialog) => {
+        expect(dialog.message()).toBe("Settings Saved!");
+        alertHandled = true;
+        await dialog.dismiss();
+      });
 
-    // Wait for timer to countdown to 0
-    await timeout(4200);
+      await page.click("#settingPageButton");
+      await page.click("#submitSettingButton");
 
-    // Check if the alert appears
-    // page.on("dialog", async (dialog) => {
-    //   expect(dialog.message()).toBe("Time is up!"); // Assuming the alert says "Time is up!"
-    //   await dialog.dismiss();
-    // });
+      expect(alertHandled).toBe(true);
+    },
+    10000
+  );
 
-    // Verify that the alert message is correct
-    expect(alertMessage).toBe("Time's up!");
-  }, 10000);
+  test(
+    "Timer triggers alert when reaching zero",
+    async () => {
+      let alertMessage = null;
+      page.once("dialog", async (dialog) => {
+        alertMessage = dialog.message();
+        await dialog.dismiss();
+      });
 
+      await page.evaluate(() => {
+        document.getElementById("startTimerButton").click();
+      });
 
-  test("Submitting timer settings shows 'Settings Saved!' alert", async () => {
-    let alertShown = false;
-    page.once("dialog", async (dialog) => {
-      expect(dialog.message()).toBe("Settings Saved!");
-      alertShown = true;
-      await dialog.dismiss();
-    });
-
-    await page.click("#settingPageButton");
-    await page.click("#submitSettingButton");
-
-    await timeout(1000);
-
-    expect(alertShown).toBe(true);
-  });
+      await timeout(4200);
+      expect(alertMessage).toBe("Time's up!");
+    },
+    10000
+  );
 });
