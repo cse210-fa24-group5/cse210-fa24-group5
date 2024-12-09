@@ -106,7 +106,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     console.log("Waiting for #todo-list");
     todoListSelector = "#todo-list";
     await page.waitForSelector(todoListSelector);
-  }, 20000);
+  }, 5000);
 
   afterEach(async () => {
     // Close the extension page after each test
@@ -121,6 +121,40 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
   afterAll(async () => {
     await browser.close();
   });
+
+  test("Clicking the remove button in the list removes the problem from the list", async () => {
+    const removeButtonSelector = `${todoListSelector} > li .remove-button`;
+    await page.click(removeButtonSelector);
+
+    // Wait for the change in the To-Do list
+    console.log("Wait for the change in the To-Do list")
+    await page.waitForSelector(todoListSelector);
+
+    // Verify the problem is removed from the To-Do list
+    console.log("Verify the problem is removed from the To-Do list")
+    const updatedTodoItems = await page.$$eval(
+      `${todoListSelector} > li`,
+      (listItems) =>
+        listItems.map((item) => {
+          const button = item.querySelector(".problem-button");
+          const spans = button ? button.querySelectorAll("span") : [];
+          return {
+            number: spans[0]?.textContent || "",
+            title: spans[1]?.textContent || "",
+            difficulty: spans[2]?.textContent || "",
+          };
+        }),
+    );
+
+    const problemStillExists = updatedTodoItems.some(
+      (item) =>
+        item.number === "1" &&
+        item.title === "Two Sum" &&
+        item.difficulty === "Easy",
+    );
+
+    expect(problemStillExists).toBe(false);
+  }, 5000);
 
   test("Clicking the problem in the list opens the problem", async () => {
     // Extract and verify the To-Do list items
@@ -177,38 +211,4 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     expect(currentUrl).toBe("https://leetcode.com/problems/two-sum/");
     await newPage.close();
   }, 10000);
-
-  test("Clicking the remove button in the list removes the problem from the list", async () => {
-    const removeButtonSelector = `${todoListSelector} > li .remove-button`;
-    await page.click(removeButtonSelector);
-
-    // Wait for the change in the To-Do list
-    console.log("Wait for the change in the To-Do list")
-    await page.waitForSelector(todoListSelector);
-
-    // Verify the problem is removed from the To-Do list
-    console.log("Verify the problem is removed from the To-Do list")
-    const updatedTodoItems = await page.$$eval(
-      `${todoListSelector} > li`,
-      (listItems) =>
-        listItems.map((item) => {
-          const button = item.querySelector(".problem-button");
-          const spans = button ? button.querySelectorAll("span") : [];
-          return {
-            number: spans[0]?.textContent || "",
-            title: spans[1]?.textContent || "",
-            difficulty: spans[2]?.textContent || "",
-          };
-        }),
-    );
-
-    const problemStillExists = updatedTodoItems.some(
-      (item) =>
-        item.number === "1" &&
-        item.title === "Two Sum" &&
-        item.difficulty === "Easy",
-    );
-
-    expect(problemStillExists).toBe(false);
-  }, 5000);
 });
