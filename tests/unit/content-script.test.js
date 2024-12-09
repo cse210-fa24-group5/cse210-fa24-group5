@@ -30,14 +30,16 @@ describe("Content Script Tests", () => {
       storage: {
         local: {
           set: jest.fn((data, callback) => callback && callback()),
-          get: jest.fn((keys, callback) => callback({ completed: [], todo: [] })),
+          get: jest.fn((keys, callback) =>
+            callback({ completed: [], todo: [] }),
+          ),
         },
       },
     };
 
-    jest.spyOn(console, "log").mockImplementation(() => { });
-    jest.spyOn(console, "warn").mockImplementation(() => { });
-    jest.spyOn(console, "error").mockImplementation(() => { });
+    jest.spyOn(console, "log").mockImplementation(() => {});
+    jest.spyOn(console, "warn").mockImplementation(() => {});
+    jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
   afterEach(() => {
@@ -63,7 +65,9 @@ describe("Content Script Tests", () => {
       document.body.innerHTML = "";
       const result = InformationRetrieval();
       expect(result).toBeNull();
-      expect(console.warn).toHaveBeenCalledWith("Problem element not found. The DOM structure may have changed or not loaded yet.");
+      expect(console.warn).toHaveBeenCalledWith(
+        "Problem element not found. The DOM structure may have changed or not loaded yet.",
+      );
     });
 
     it("returns null when problem data is incomplete (missing title)", () => {
@@ -71,15 +75,21 @@ describe("Content Script Tests", () => {
       problemLink.textContent = "";
       const result = InformationRetrieval();
       expect(result).toBeNull();
-      expect(console.warn).toHaveBeenCalledWith("Incomplete problem data. Skipping retrieval.");
+      expect(console.warn).toHaveBeenCalledWith(
+        "Incomplete problem data. Skipping retrieval.",
+      );
     });
 
     it("returns null when problemDifficulty is missing", () => {
-      const difficultyDiv = document.querySelector(".flexlayout__tab div:nth-child(2)");
+      const difficultyDiv = document.querySelector(
+        ".flexlayout__tab div:nth-child(2)",
+      );
       difficultyDiv.textContent = "";
       const result = InformationRetrieval();
       expect(result).toBeNull();
-      expect(console.warn).toHaveBeenCalledWith("Incomplete problem data. Skipping retrieval.");
+      expect(console.warn).toHaveBeenCalledWith(
+        "Incomplete problem data. Skipping retrieval.",
+      );
     });
   });
 
@@ -95,9 +105,11 @@ describe("Content Script Tests", () => {
             difficulty: "Medium",
           },
         },
-        expect.any(Function)
+        expect.any(Function),
       );
-      expect(console.log).toHaveBeenCalledWith("Problem saved to local storage.");
+      expect(console.log).toHaveBeenCalledWith(
+        "Problem saved to local storage.",
+      );
     });
 
     it("does not save when InformationRetrieval returns null", () => {
@@ -110,22 +122,27 @@ describe("Content Script Tests", () => {
       console.log("Calling saveProblemDetails...");
       saveProblemDetails();
       console.log("Checking chrome.storage.local.set calls...");
-      console.log("chrome.storage.local.set mock calls:", global.chrome.storage.local.set.mock.calls);
+      console.log(
+        "chrome.storage.local.set mock calls:",
+        global.chrome.storage.local.set.mock.calls,
+      );
       expect(global.chrome.storage.local.set).toHaveBeenCalledTimes(2);
       jest.unmock("../../src/content-script");
     });
 
-
-
-
     it("does not add duplicate tasks to the Completed List", () => {
       chrome.storage.local.get.mockImplementation((keys, callback) => {
-        callback({ todo: [{ title: "Example Problem", number: "1" }], completed: [] });
+        callback({
+          todo: [{ title: "Example Problem", number: "1" }],
+          completed: [],
+        });
       });
 
       saveProblemDetails();
 
-      expect(console.log).toHaveBeenCalledWith("Problem saved to local storage.");
+      expect(console.log).toHaveBeenCalledWith(
+        "Problem saved to local storage.",
+      );
     });
   });
 
@@ -149,7 +166,10 @@ describe("Content Script Tests", () => {
       const contentScript = require("../../src/content-script");
 
       // Spy on saveProblemDetails
-      const saveProblemDetailsSpy = jest.spyOn(contentScript, "saveProblemDetails");
+      const saveProblemDetailsSpy = jest.spyOn(
+        contentScript,
+        "saveProblemDetails",
+      );
 
       // Mock MutationObserver
       const mockObserve = jest.fn();
@@ -181,9 +201,6 @@ describe("Content Script Tests", () => {
       }, 0); // Execute on the next tick of the event loop
     });
 
-
-
-
     it("disconnects observer after handling submission", (done) => {
       // Mock DOM for the submission result
       document.body.innerHTML = `
@@ -212,7 +229,9 @@ describe("Content Script Tests", () => {
       contentScript.autoSaveProblemDetails();
 
       // Simulate successful submission by updating the DOM
-      const successMessage = document.querySelector('span[data-e2e-locator="submission-result"]');
+      const successMessage = document.querySelector(
+        'span[data-e2e-locator="submission-result"]',
+      );
       successMessage.textContent = "Accepted";
 
       // Trigger the observer callback
@@ -224,13 +243,12 @@ describe("Content Script Tests", () => {
       setTimeout(() => {
         // Check if disconnect was not called
         expect(mockDisconnect).toHaveBeenCalledTimes(0);
-        expect(console.log).not.toHaveBeenCalledWith("Observer disconnected to prevent duplicate processing."); // Verify log message not logged
+        expect(console.log).not.toHaveBeenCalledWith(
+          "Observer disconnected to prevent duplicate processing.",
+        ); // Verify log message not logged
         done(); // Mark the test as done
       }, 0);
     });
-
-
-
 
     it("handles case when InformationRetrieval returns null in MutationObserver", (done) => {
       const contentScript = require("../../src/content-script");
@@ -291,7 +309,9 @@ describe("Content Script Tests", () => {
 
     it("moves problem to completed list on successful submission", (done) => {
       const mockSet = jest.fn((data, callback) => callback && callback());
-      const mockGet = jest.fn((keys, callback) => callback({ completed: [], todo: [] }));
+      const mockGet = jest.fn((keys, callback) =>
+        callback({ completed: [], todo: [] }),
+      );
 
       global.chrome.storage.local.set = mockSet;
       global.chrome.storage.local.get = mockGet;
@@ -324,14 +344,13 @@ describe("Content Script Tests", () => {
       }, 0);
     });
 
-
     it("does not move problem if already in completed list", (done) => {
       const mockSet = jest.fn((data, callback) => callback && callback());
       const mockGet = jest.fn((keys, callback) =>
         callback({
           completed: [{ title: "Example Problem", number: "1" }],
           todo: [],
-        })
+        }),
       );
 
       global.chrome.storage.local.set = mockSet;
@@ -365,11 +384,10 @@ describe("Content Script Tests", () => {
       }, 0);
     });
 
-
     it("handles non-Accepted submissions", (done) => {
       const mockSet = jest.fn((data, callback) => callback && callback());
       const mockGet = jest.fn((keys, callback) =>
-        callback({ completed: [], todo: [] })
+        callback({ completed: [], todo: [] }),
       );
 
       global.chrome.storage.local.set = mockSet;
@@ -433,46 +451,53 @@ describe("Content Script Tests", () => {
     it("does nothing if titleElement does not exist in MutationObserver", () => {
       const mockObserve = jest.fn();
       const mockDisconnect = jest.fn();
-    
+
       global.MutationObserver = jest.fn((callback) => ({
         observe: mockObserve,
         disconnect: mockDisconnect,
       }));
-    
+
       const contentScript = require("../../src/content-script");
       contentScript.autoSaveProblemDetails();
-    
+
       // Simulate MutationObserver callback without titleElement
       const callback = global.MutationObserver.mock.calls[0][0];
       callback([{ type: "childList" }]);
-    
+
       expect(mockDisconnect).not.toHaveBeenCalled(); // Ensure observer is not disconnected
     });
     it("does nothing if clicked button is not a submit button", () => {
       document.body.innerHTML = `
         <button>Cancel</button>
       `;
-    
+
       const contentScript = require("../../src/content-script");
       const button = document.querySelector("button");
-    
+
       // Simulate click event
       button.click();
-    
+
       expect(global.chrome.storage.local.set).not.toHaveBeenCalled(); // Ensure storage is not updated
     });
     it("does not update completed list if InformationRetrieval returns null", (done) => {
-      jest.spyOn(require("../../src/content-script"), "InformationRetrieval").mockReturnValue(null);
-    
+      jest
+        .spyOn(require("../../src/content-script"), "InformationRetrieval")
+        .mockReturnValue(null);
+
       const mockSet = jest.fn((data, callback) => callback && callback());
-      const mockGet = jest.fn((keys, callback) => callback({ completed: [], todo: [] }));
-    
+      const mockGet = jest.fn((keys, callback) =>
+        callback({ completed: [], todo: [] }),
+      );
+
       global.chrome.storage.local.set = mockSet;
       global.chrome.storage.local.get = mockGet;
-    
+
       const observerInstance = new global.MutationObserver(() => {});
-      observerInstance.observe(document.body, { childList: true, subtree: true });
-    
+      observerInstance.observe(document.body, {
+        childList: true,
+        subtree: true,
+      });
+
       setTimeout(() => {
         expect(mockSet).not.toHaveBeenCalled(); // Ensure no updates to storage
         done();
@@ -482,26 +507,22 @@ describe("Content Script Tests", () => {
       document.body.innerHTML = `
         <a class="no-underline" href="/problems/example-problem"></a>
       `;
-      
+
       const mockDisconnect = jest.fn();
       global.MutationObserver = jest.fn(() => ({
         observe: jest.fn(),
         disconnect: mockDisconnect,
       }));
-    
+
       // Run the function
       autoSaveProblemDetails();
-    
+
       // Manually trigger the MutationObserver callback
       const callback = global.MutationObserver.mock.calls[0][0];
       callback([{ type: "childList" }]);
-    
+
       // Assert that the observer disconnects
       expect(mockDisconnect).toHaveBeenCalled(); // Simplified check for coverage
     });
-    
-    
-        
-
   });
 });

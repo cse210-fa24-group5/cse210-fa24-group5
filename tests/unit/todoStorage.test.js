@@ -19,12 +19,16 @@ global.chrome = {
 };
 
 // Import the script (modify the path as needed)
-const { InformationRetrieval , initializeHijackButton , observeProblemPage} = require("../../src/hijackAddButton");
+const {
+  InformationRetrieval,
+  initializeHijackButton,
+  observeProblemPage,
+} = require("../../src/hijackAddButton");
 
 describe("LeetCode Problem Hijacker", () => {
   beforeEach(() => {
     // Create a mock DOM structure
-    document.body.innerHTML =`
+    document.body.innerHTML = `
       <div class="flexlayout__tab">
         <div>
           <div>
@@ -41,13 +45,13 @@ describe("LeetCode Problem Hijacker", () => {
           </div>
         </div>
       </div>
-    `
+    `;
   });
 
   afterEach(() => {
     jest.clearAllMocks();
     mockStorage.todo = [];
-    document.body.innerHTML =""
+    document.body.innerHTML = "";
   });
 
   it("should correctly extract problem details from the DOM", () => {
@@ -65,7 +69,7 @@ describe("LeetCode Problem Hijacker", () => {
     const problemDetails = InformationRetrieval();
     expect(problemDetails).toBeNull();
   });
-  
+
   it("should add a '+' button next to the problem title", () => {
     initializeHijackButton();
     const button = document.querySelector(".add-todo-btn");
@@ -87,7 +91,7 @@ describe("LeetCode Problem Hijacker", () => {
 
     expect(chrome.storage.local.get).toHaveBeenCalledWith(
       ["todo"],
-      expect.any(Function)
+      expect.any(Function),
     );
     expect(chrome.storage.local.set).toHaveBeenCalledWith(
       {
@@ -100,7 +104,7 @@ describe("LeetCode Problem Hijacker", () => {
           },
         ],
       },
-      expect.any(Function)
+      expect.any(Function),
     );
   });
 
@@ -128,7 +132,7 @@ describe("LeetCode Problem Hijacker", () => {
             difficulty: "Easy",
           },
         ]),
-      })
+      }),
     );
   });
 });
@@ -165,7 +169,7 @@ describe("observeProblemPage", () => {
 
   afterEach(() => {
     jest.restoreAllMocks(); // Restore all mocks after each test
-    document.body.innerHTML =""
+    document.body.innerHTML = "";
   });
 
   it("should initialize the '+' button when a new problem page is loaded", () => {
@@ -189,5 +193,3 @@ describe("observeProblemPage", () => {
     expect(button).not.toBeNull();
   });
 });
-
-

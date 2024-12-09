@@ -3,10 +3,14 @@
  */
 function InformationRetrieval() {
   const flexTab = document.querySelector(`.flexlayout__tab`);
-  const problemElement = flexTab?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0];
+  const problemElement =
+    flexTab?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]
+      ?.children?.[0]?.children?.[0];
 
   if (!problemElement) {
-    console.warn("Problem element not found. The DOM structure may have changed or not loaded yet.");
+    console.warn(
+      "Problem element not found. The DOM structure may have changed or not loaded yet.",
+    );
     return null;
   }
 
@@ -14,7 +18,9 @@ function InformationRetrieval() {
   const problemTitle = problemTextContent.split(". ")[1];
   const problemNumber = problemTextContent.split(". ")[0];
   const problemLink = problemElement.href;
-  const problemDifficulty = document.querySelector(`.flexlayout__tab`)?.children?.[0]?.children?.[0]?.children?.[1]?.children?.[0]?.textContent;
+  const problemDifficulty =
+    document.querySelector(`.flexlayout__tab`)?.children?.[0]?.children?.[0]
+      ?.children?.[1]?.children?.[0]?.textContent;
 
   if (!problemTitle || !problemNumber || !problemLink || !problemDifficulty) {
     console.warn("Incomplete problem data. Skipping retrieval.");
@@ -41,14 +47,16 @@ function saveProblemDetails() {
   });
 }
 
-/** 
- * Function to automatically save problem details when the page updates 
+/**
+ * Function to automatically save problem details when the page updates
  */
 function autoSaveProblemDetails() {
   saveProblemDetails();
 
   const observer = new MutationObserver(() => {
-    const titleElement = document.querySelector('a.no-underline[href^="/problems/"]');
+    const titleElement = document.querySelector(
+      'a.no-underline[href^="/problems/"]',
+    );
     if (titleElement) {
       saveProblemDetails();
       observer.disconnect();
@@ -71,18 +79,22 @@ document.body.addEventListener("click", (event) => {
 /**
  * Observe for submission results to update storage
  */
-let handledSubmission = false; 
+let handledSubmission = false;
 
 const observer = new MutationObserver((mutations) => {
-
-  const successMessage = document.querySelector('span[data-e2e-locator="submission-result"]');
-  if (successMessage && successMessage.textContent.includes("Accepted") && !handledSubmission) {
-    handledSubmission = true; 
+  const successMessage = document.querySelector(
+    'span[data-e2e-locator="submission-result"]',
+  );
+  if (
+    successMessage &&
+    successMessage.textContent.includes("Accepted") &&
+    !handledSubmission
+  ) {
+    handledSubmission = true;
     console.log("accepted!");
 
     const problemData = InformationRetrieval();
     if (!problemData) {
-      
       return;
     }
     chrome.storage.local.get(["completed", "todo"], (result) => {
@@ -94,21 +106,21 @@ const observer = new MutationObserver((mutations) => {
         console.log("Problem already exists in completed list.");
       }
 
-      const updatedTodo = todo.filter((item) => item.number !== problemData.number);
-  
+      const updatedTodo = todo.filter(
+        (item) => item.number !== problemData.number,
+      );
 
       chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
         console.log("Storage updated: problem moved to completed list.");
       });
     });
 
-    observer.disconnect(); 
+    observer.disconnect();
     console.log("Observer disconnected to prevent duplicate processing.");
   } else if (handledSubmission) {
     console.log("Submission already handled. Skipping.");
   }
 });
-
 
 /**
  * Initialize problem auto-save and observe DOM changes
@@ -124,6 +136,10 @@ function isESModuleSupported() {
   }
 }
 if (isESModuleSupported()) {
-  module.exports = { InformationRetrieval , saveProblemDetails , autoSaveProblemDetails};
+  module.exports = {
+    InformationRetrieval,
+    saveProblemDetails,
+    autoSaveProblemDetails,
+  };
 }
 observer.observe(document.body, { childList: true, subtree: true });

@@ -169,7 +169,12 @@ function isESModuleSupported() {
   }
 }
 if (isESModuleSupported()) {
-  module.exports = { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange };
+  module.exports = {
+    initializeTimer,
+    checkDifficulty,
+    isESModuleSupported,
+    onUrlChange,
+  };
 } else {
   titleObserver.observe(document.querySelector("title"), { childList: true });
 }

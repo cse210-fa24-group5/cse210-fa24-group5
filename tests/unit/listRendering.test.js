@@ -17,7 +17,12 @@ global.chrome = {
   },
 };
 
-const { initializeStorage, fetchAndRender, renderTodoList, renderList } = require('../../src/popup');
+const {
+  initializeStorage,
+  fetchAndRender,
+  renderTodoList,
+  renderList,
+} = require("../../src/popup");
 
 describe("initializeStorage", () => {
   it("should initialize the storage with empty lists if not present", () => {
@@ -28,8 +33,14 @@ describe("initializeStorage", () => {
 
     initializeStorage();
 
-    expect(chrome.storage.local.set).toHaveBeenCalledWith({ todo: [] }, expect.any(Function));
-    expect(chrome.storage.local.set).toHaveBeenCalledWith({ completed: [] }, expect.any(Function));
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      { todo: [] },
+      expect.any(Function),
+    );
+    expect(chrome.storage.local.set).toHaveBeenCalledWith(
+      { completed: [] },
+      expect.any(Function),
+    );
   });
 });
 
@@ -58,10 +69,20 @@ describe("fetchAndRender", () => {
 
     // Mock data
     mockTodo = [
-      { title: "Example Problem", number: "1", difficulty: "Easy", link: "http://example.com" },
+      {
+        title: "Example Problem",
+        number: "1",
+        difficulty: "Easy",
+        link: "http://example.com",
+      },
     ];
     mockCompleted = [
-      { title: "Completed Problem", number: "2", difficulty: "Medium", link: "http://example.com/completed" },
+      {
+        title: "Completed Problem",
+        number: "2",
+        difficulty: "Medium",
+        link: "http://example.com/completed",
+      },
     ];
 
     chrome.storage.local.get = jest.fn((keys, callback) => {
@@ -113,21 +134,25 @@ describe("fetchAndRender", () => {
   it("should switch to the todo page on 'Back to Todo' click", () => {
     const backToTodoButton = document.getElementById("backToTodo");
     backToTodoButton.click();
-  
-    expect(getComputedStyle(document.getElementById("todo-page")).display).toBe("block");
-    expect(getComputedStyle(document.getElementById("completed-page")).display).toBe("none");
+
+    expect(getComputedStyle(document.getElementById("todo-page")).display).toBe(
+      "block",
+    );
+    expect(
+      getComputedStyle(document.getElementById("completed-page")).display,
+    ).toBe("none");
   });
-  
+
   it("should switch to the completed page on 'Go to Completed' click", () => {
     const goToCompletedButton = document.getElementById("goToCompleted");
     goToCompletedButton.click();
     expect(goToCompletedButton).not.toBeNull();
-  
-    expect(getComputedStyle(document.getElementById("completed-page")).display).toBe("block");
-    expect(getComputedStyle(document.getElementById("todo-page")).display).toBe("none");
+
+    expect(
+      getComputedStyle(document.getElementById("completed-page")).display,
+    ).toBe("block");
+    expect(getComputedStyle(document.getElementById("todo-page")).display).toBe(
+      "none",
+    );
   });
-  
 });
-
-  
-

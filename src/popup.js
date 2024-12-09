@@ -1,17 +1,17 @@
 /**
- *initialise storage if empty lists 
+ *initialise storage if empty lists
  */
 function initializeStorage() {
   chrome.storage.local.get(["completed"], (result) => {
     if (!result.completed) {
-      chrome.storage.local.set({completed: [] }, () => {
+      chrome.storage.local.set({ completed: [] }, () => {
         console.log("Storage initialized with empty completed lists.");
       });
     }
   });
-  chrome.storage.local.get([ "todo"], (result) => {
-    if (!result.todo ) {
-      chrome.storage.local.set({ todo: []}, () => {
+  chrome.storage.local.get(["todo"], (result) => {
+    if (!result.todo) {
+      chrome.storage.local.set({ todo: [] }, () => {
         console.log("Storage initialized with empty todo lists.");
       });
     }
@@ -19,7 +19,7 @@ function initializeStorage() {
 }
 
 /**
- * renders the empty state of todo/completed list 
+ * renders the empty state of todo/completed list
  */
 function renderEmptyState(container, message) {
   const emptyMessage = document.createElement("p");
@@ -34,11 +34,10 @@ function renderEmptyState(container, message) {
 function renderTodoList(container, items) {
   const EMPTY_TODO_MESSAGE = "No tasks in your To-Do list!";
   console.log("rendering To-do");
-  container.innerHTML = ""; 
+  container.innerHTML = "";
   if (items[0] == null) {
     renderEmptyState(container, EMPTY_TODO_MESSAGE);
-  }
-  else{
+  } else {
     items.forEach((problem) => {
       //created span elements for better CSS handling
       const spanTitle = document.createElement("span");
@@ -55,7 +54,7 @@ function renderTodoList(container, items) {
       button.appendChild(spanDifficulty);
 
       //Allow users to be redirected to problem in todo if clicked
-      button.addEventListener("click", function() {
+      button.addEventListener("click", function () {
         console.log("Button clicked for problem:", problem);
         console.log("Problem link:", problem.link);
         window.open(problem.link, "_blank");
@@ -69,14 +68,16 @@ function renderTodoList(container, items) {
         button.classList.add("medium-difficulty");
       } else if (problem.difficulty === "Hard") {
         button.classList.add("hard-difficulty");
-      }  
+      }
       const removeButton = document.createElement("button");
       removeButton.textContent = "x";
       removeButton.classList.add("remove-button");
       removeButton.addEventListener("click", () => {
         chrome.storage.local.get(["todo"], (result) => {
           const todo = result.todo || [];
-          const updatedTodo = todo.filter((currItem) => JSON.stringify(currItem) !== JSON.stringify(problem));
+          const updatedTodo = todo.filter(
+            (currItem) => JSON.stringify(currItem) !== JSON.stringify(problem),
+          );
 
           chrome.storage.local.set({ todo: updatedTodo }, () => {
             console.log("Storage updated successfully.");
@@ -91,36 +92,35 @@ function renderTodoList(container, items) {
       container.appendChild(li);
     });
   }
-};
+}
 
 /**
  * Renders the completed list items
  */
-function renderList(container,items){
+function renderList(container, items) {
   const EMPTY_COMPLETED_MESSAGE = "No tasks completed yet!";
   console.log("rendering completed problems list");
   container.innerHTML = ""; // Clear the existing list
   if (items[0] == null) {
     renderEmptyState(container, EMPTY_COMPLETED_MESSAGE);
-  } 
-  else{
+  } else {
     items.forEach((problem) => {
       //created span elements for better CSS handling
       const spanTitle = document.createElement("span");
       const spanNumber = document.createElement("span");
       const spanDifficulty = document.createElement("span");
-  
+
       spanTitle.textContent = problem.title;
       spanNumber.textContent = problem.number;
       spanDifficulty.textContent = problem.difficulty;
-  
+
       const button = document.createElement("button");
       button.appendChild(spanNumber);
       button.appendChild(spanTitle);
       button.appendChild(spanDifficulty);
 
       // Allow users to be redirected to problem page in completed problems, if clicked
-      button.addEventListener("click", function() {
+      button.addEventListener("click", function () {
         console.log("Button clicked for problem:", problem);
         console.log("Problem link:", problem.link);
         window.open(problem.link, "_blank");
@@ -133,14 +133,14 @@ function renderList(container,items){
         button.classList.add("medium-difficulty");
       } else if (problem.difficulty === "Hard") {
         button.classList.add("hard-difficulty");
-      } 
+      }
       button.classList.add("problem-button");
       const li = document.createElement("li");
       li.appendChild(button);
       container.appendChild(li);
     });
   }
-};
+}
 
 /**
  * fetching the completed and todo-list from storage and rendering them.
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-  initializeStorage()
+  initializeStorage();
   fetchAndRender();
   setInterval(fetchAndRender, 5000);
 });
@@ -187,5 +187,10 @@ function isESModuleSupported() {
   }
 }
 if (isESModuleSupported()) {
-  module.exports = { initializeStorage, fetchAndRender, renderTodoList, renderList };
+  module.exports = {
+    initializeStorage,
+    fetchAndRender,
+    renderTodoList,
+    renderList,
+  };
 }

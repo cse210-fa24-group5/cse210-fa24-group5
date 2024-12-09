@@ -2,19 +2,23 @@
  * Retrieves the problem details from the LeetCode page.
  */
 function InformationRetrieval() {
-  const problemElement = document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]?.children[0]?.children[0]?.children[0]?.children[0];
+  const problemElement =
+    document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
+      ?.children[0]?.children[0]?.children[0]?.children[0];
   if (!problemElement) return null;
 
   const problemTextContent = problemElement.textContent;
   const problemTitle = problemTextContent.split(". ")[1];
   const problemNumber = problemTextContent.split(". ")[0];
   const problemLink = problemElement.href;
-  const problemDifficulty = document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]?.children[1]?.children[0]?.textContent;
+  const problemDifficulty =
+    document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
+      ?.children[1]?.children[0]?.textContent;
   return {
     title: problemTitle,
     number: problemNumber,
     link: problemLink,
-    difficulty: problemDifficulty
+    difficulty: problemDifficulty,
   };
 }
 
@@ -26,7 +30,9 @@ function initializeHijackButton() {
   if (!problemData) return;
 
   const { title, number, link, difficulty } = problemData;
-  const problemElement = document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]?.children[0]?.children[0]?.children[0]?.children[0];
+  const problemElement =
+    document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
+      ?.children[0]?.children[0]?.children[0]?.children[0];
 
   // Check if the button is already added
   if (problemElement.querySelector(".add-todo-btn")) return;
@@ -45,10 +51,12 @@ function initializeHijackButton() {
         link: link,
         difficulty: difficulty,
       };
-      if (!todo.some(task => task.number === number)) {
+      if (!todo.some((task) => task.number === number)) {
         todo.push(newTask);
         chrome.storage.local.set({ todo }, () => {
-          console.log(`Problem ${title} #${number} of difficulty ${difficulty} added to Todo List! Link: ${link}`);
+          console.log(
+            `Problem ${title} #${number} of difficulty ${difficulty} added to Todo List! Link: ${link}`,
+          );
         });
       } else {
         console.log("This problem is already in the Todo List!");
@@ -90,7 +98,10 @@ function isESModuleSupported() {
   }
 }
 if (isESModuleSupported()) {
-  module.exports = { InformationRetrieval , initializeHijackButton , observeProblemPage};
+  module.exports = {
+    InformationRetrieval,
+    initializeHijackButton,
+    observeProblemPage,
+  };
 }
 observeProblemPage();
-
