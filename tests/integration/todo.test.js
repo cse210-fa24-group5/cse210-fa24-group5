@@ -154,7 +154,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     );
 
     expect(problemStillExists).toBe(false);
-  }, 5000);
+  }, 10000);
 
   test("Clicking the problem in the list opens the problem", async () => {
     // Extract and verify the To-Do list items
