@@ -74,12 +74,11 @@ document.body.addEventListener("click", (event) => {
 let handledSubmission = false; 
 
 const observer = new MutationObserver((mutations) => {
-  
 
   const successMessage = document.querySelector('span[data-e2e-locator="submission-result"]');
   if (successMessage && successMessage.textContent.includes("Accepted") && !handledSubmission) {
     handledSubmission = true; 
-   
+    console.log("accepted!");
 
     const problemData = InformationRetrieval();
     if (!problemData) {
@@ -115,5 +114,16 @@ const observer = new MutationObserver((mutations) => {
  * Initialize problem auto-save and observe DOM changes
  */
 autoSaveProblemDetails();
-module.exports = { InformationRetrieval , saveProblemDetails , autoSaveProblemDetails};
+function isESModuleSupported() {
+  try {
+    new Function("import('data:text/javascript,export{}')");
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+if (isESModuleSupported()) {
+  module.exports = { InformationRetrieval , saveProblemDetails , autoSaveProblemDetails};
+}
 observer.observe(document.body, { childList: true, subtree: true });
