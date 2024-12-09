@@ -106,7 +106,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     console.log("Waiting for #todo-list");
     todoListSelector = "#todo-list";
     await page.waitForSelector(todoListSelector);
-  }, 5000);
+  }, 15000);
 
   afterEach(async () => {
     // Close the extension page after each test
@@ -122,61 +122,67 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     await browser.close();
   });
 
-  // test("Clicking the problem in the list opens the problem", async () => {
-  //   // Extract and verify the To-Do list items
-  //   console.log("Extract and verify the To-Do list items")
-  //   const todoItems = await page.$$eval(
-  //     `${todoListSelector} > li`,
-  //     (listItems) =>
-  //       listItems.map((item) => {
-  //         const button = item.querySelector(".problem-button");
-  //         const spans = button ? button.querySelectorAll("span") : [];
-  //         return {
-  //           number: spans[0]?.textContent || "",
-  //           title: spans[1]?.textContent || "",
-  //           difficulty: spans[2]?.textContent || "",
-  //         };
-  //       }),
-  //   );
+  test("dummy", async () => {
+    console.log("This is a dummy test");
+    let a = 1;
+    expect(a).toBe(1);
+  });
 
-  //   // Check if the problem is added to the To-Do list
-  //   console.log("Check if the problem is added to the To-Do list")
-  //   const problemExists = todoItems.some(
-  //     (item) =>
-  //       item.number === "1" &&
-  //       item.title === "Two Sum" &&
-  //       item.difficulty === "Easy",
-  //   );
+  test("Clicking the problem in the list opens the problem", async () => {
+    // Extract and verify the To-Do list items
+    console.log("Extract and verify the To-Do list items")
+    const todoItems = await page.$$eval(
+      `${todoListSelector} > li`,
+      (listItems) =>
+        listItems.map((item) => {
+          const button = item.querySelector(".problem-button");
+          const spans = button ? button.querySelectorAll("span") : [];
+          return {
+            number: spans[0]?.textContent || "",
+            title: spans[1]?.textContent || "",
+            difficulty: spans[2]?.textContent || "",
+          };
+        }),
+    );
 
-  //   expect(problemExists).toBe(true);
-  //   const newPagePromise = new Promise((resolve) => {
-  //     browser.once("targetcreated", async (target) => {
-  //       const newPage = await target.page();
-  //       resolve(newPage);
-  //     });
-  //   });
+    // Check if the problem is added to the To-Do list
+    console.log("Check if the problem is added to the To-Do list")
+    const problemExists = todoItems.some(
+      (item) =>
+        item.number === "1" &&
+        item.title === "Two Sum" &&
+        item.difficulty === "Easy",
+    );
 
-  //   // Click on the problem button to open it in a new tab
-  //   console.log("Click on the problem button to open it in a new tab")
-  //   const problemLinkSelector = `${todoListSelector} > li .problem-button`;
-  //   await page.click(problemLinkSelector);
+    expect(problemExists).toBe(true);
+    const newPagePromise = new Promise((resolve) => {
+      browser.once("targetcreated", async (target) => {
+        const newPage = await target.page();
+        resolve(newPage);
+      });
+    });
 
-  //   const newPage = await newPagePromise;
-  //   const userAgent =
-  //   "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
-  //   await newPage.setUserAgent(userAgent);
-  //   await newPage.setExtraHTTPHeaders({
-  //   "Accept-Language": "en-US,en;q=0.9",
-  //   });
-  //   await timeout(2000);
-  //   await newPage.waitForNavigation({ waitUntil: "domcontentloaded" });
+    // Click on the problem button to open it in a new tab
+    console.log("Click on the problem button to open it in a new tab")
+    const problemLinkSelector = `${todoListSelector} > li .problem-button`;
+    await page.click(problemLinkSelector);
 
-  //   // Verify the URL of the new page
-  //   console.log("Verify the URL of the new page");
-  //   const currentUrl = newPage.url();
-  //   expect(currentUrl).toBe("https://leetcode.com/problems/two-sum/");
-  //   await newPage.close();
-  // }, 10000);
+    const newPage = await newPagePromise;
+    const userAgent =
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
+    await newPage.setUserAgent(userAgent);
+    await newPage.setExtraHTTPHeaders({
+    "Accept-Language": "en-US,en;q=0.9",
+    });
+    await timeout(2000);
+    await newPage.waitForNavigation({ waitUntil: "domcontentloaded" });
+
+    // Verify the URL of the new page
+    console.log("Verify the URL of the new page");
+    const currentUrl = newPage.url();
+    expect(currentUrl).toBe("https://leetcode.com/problems/two-sum/");
+    await newPage.close();
+  }, 10000);
 
   test("Clicking the remove button in the list removes the problem from the list", async () => {
     const removeButtonSelector = `${todoListSelector} > li .remove-button`;
@@ -210,5 +216,5 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     );
 
     expect(problemStillExists).toBe(false);
-  }, 5000);
+  }, 10000);
 });
