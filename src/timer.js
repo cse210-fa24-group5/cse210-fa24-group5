@@ -95,8 +95,8 @@ function checkDifficulty() {
 }
 
 function fetchTimeAndInitialize() {
-  let times = [21,41,61];
-  chrome.storage.local.get([ "mins"], (result) => {
+  let times = [21, 41, 61];
+  chrome.storage.local.get(["mins"], (result) => {
     times = result.mins;
     initializeTimer(times);
   });
@@ -106,7 +106,7 @@ function fetchTimeAndInitialize() {
  * Initializes timer's components and remaining time
  * @returns {number}  minutes - minutes remaining for timer
  */
-function initializeTimer(times = [20,40,60]) {
+function initializeTimer(times = [20, 40, 60]) {
   easyMinute = times[0];
   mediumMinute = times[1];
   hardMinute = times[2];
@@ -161,9 +161,9 @@ function showSettingsPage() {
     `;
     document.body.appendChild(settingsOverlay);
   }
-  document.getElementById('easy').value = easyMinute;
-  document.getElementById('medium').value = mediumMinute;
-  document.getElementById('hard').value = hardMinute;
+  document.getElementById("easy").value = easyMinute;
+  document.getElementById("medium").value = mediumMinute;
+  document.getElementById("hard").value = hardMinute;
 }
 
 function hideSettingsPage() {
@@ -172,20 +172,20 @@ function hideSettingsPage() {
 }
 
 function submitSettings() {
-  const ez = document.getElementById('easy').value;
-  const mid = document.getElementById('medium').value;
-  const hard = document.getElementById('hard').value;
-  new_times = [ez, mid,hard];
+  const ez = document.getElementById("easy").value;
+  const mid = document.getElementById("medium").value;
+  const hard = document.getElementById("hard").value;
+  new_times = [ez, mid, hard];
   chrome.storage.local.set({ mins: new_times }, () => {
-    window.alert("Settings Saved!")
+    window.alert("Settings Saved!");
     fetchTimeAndInitialize();
     hideSettingsPage();
-  })
+  });
 }
 
-window.addEventListener("load", () => { 
+window.addEventListener("load", () => {
   fetchTimeAndInitialize();
-})
+});
 /**
  * Initialize timer on loading window
  */
@@ -231,7 +231,12 @@ function isESModuleSupported() {
   }
 }
 if (isESModuleSupported()) {
-  module.exports = { initializeTimer, checkDifficulty, isESModuleSupported, onUrlChange };
+  module.exports = {
+    initializeTimer,
+    checkDifficulty,
+    isESModuleSupported,
+    onUrlChange,
+  };
 } else {
   titleObserver.observe(document.querySelector("title"), { childList: true });
 }

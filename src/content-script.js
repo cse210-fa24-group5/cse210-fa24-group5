@@ -1,27 +1,31 @@
 //storing the problem details as an object
-function InformationRetrieval(){
-  const problemElement = document.querySelector(`.flexlayout__tab`).children[0].children[0].children[0].children[0].children[0].children[0];
+function InformationRetrieval() {
+  const problemElement =
+    document.querySelector(`.flexlayout__tab`).children[0].children[0]
+      .children[0].children[0].children[0].children[0];
   const problemTextContent = problemElement.textContent;
 
   const problemTitle = problemTextContent.split(". ")[1];
   const problemNumber = problemTextContent.split(". ")[0];
   const problemLink = problemElement.href;
-  const problemDifficulty = document.querySelector(`.flexlayout__tab`).children[0].children[0].children[1].children[0].textContent;
+  const problemDifficulty =
+    document.querySelector(`.flexlayout__tab`).children[0].children[0]
+      .children[1].children[0].textContent;
   return {
     title: problemTitle,
     number: problemNumber,
     link: problemLink,
-    difficulty: problemDifficulty
-  };  
+    difficulty: problemDifficulty,
+  };
 }
 
 let problem = new Object();
 const { title, number, link, difficulty } = InformationRetrieval();
-problem = { title, number, link, difficulty};
+problem = { title, number, link, difficulty };
 
 //saving the current problem to local storage
 function saveProblemDetails() {
-  if(problem.number){
+  if (problem.number) {
     chrome.storage.local.set({ problem: { ...problem } }, () => {
       console.log("Stored problem:", problem);
     });
@@ -73,10 +77,12 @@ const observer = new MutationObserver((mutations) => {
         chrome.storage.local.get(["completed", "todo"], (result) => {
           const completed = result.completed || [];
           const todo = result.todo || [];
-          if (!completed.some(item => item.number === savedProblem.number)) {
+          if (!completed.some((item) => item.number === savedProblem.number)) {
             completed.push(savedProblem);
           }
-          const updatedTodo = todo.filter(item => item.number !== savedProblem.number);
+          const updatedTodo = todo.filter(
+            (item) => item.number !== savedProblem.number,
+          );
 
           chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
             console.log("Storage updated successfully.");
