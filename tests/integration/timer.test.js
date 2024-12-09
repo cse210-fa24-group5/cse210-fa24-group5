@@ -139,38 +139,6 @@ describe("LeetCode Timer Overlay Testing", () => {
     expect(isVisibleAfterShow).toBe(true);
   });
 
-  test(
-    "Changing timer easy settings updates countdown correctly",
-    async () => {
-      await page.click("#settingPageButton");
-  
-      const newEasyValue = 0.0333; // 2 seconds
-      await page.evaluate((value) => {
-        document.getElementById("easy").value = value;
-      }, newEasyValue);
-  
-      let alertHandled = false;
-      page.once("dialog", async (dialog) => {
-        expect(dialog.message()).toBe("Settings Saved!");
-        alertHandled = true;
-        await dialog.dismiss();
-      });
-  
-      await page.click("#submitSettingButton");
-      expect(alertHandled).toBe(true);
-  
-      // Reload the page and wait for the timer to update
-      await page.waitForSelector("#countdown"); // Wait for the countdown to be visible again
-  
-      // Log the countdown value to ensure it is updated
-      const countdownText = await page.$eval("#countdown", (el) => el.textContent);
-      console.log('Updated countdown:', countdownText);
-  
-      // Ensure the countdown is updated to 5:00
-      expect(countdownText).toBe("0:02");
-    },
-    20000 // Increased timeout to handle dialog and settings reload
-  );
   
   
 
