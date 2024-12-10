@@ -123,12 +123,6 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     await browser.close();
   });
 
-  test("dummy", async () => {
-    console.log("This is a dummy test");
-    let a = 1;
-    expect(a).toBe(1);
-  });
-
   test("Clicking the problem in the list opens the problem", async () => {
     // Extract and verify the To-Do list items
     console.log("Extract and verify the To-Do list items")
