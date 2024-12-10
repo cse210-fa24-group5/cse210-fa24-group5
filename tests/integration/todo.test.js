@@ -78,7 +78,8 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
   beforeEach(async () => {
     //Clicking the plus button adds the problem to the To-Do list
     // Navigate to LeetCode problem page
-    page = await browser.newPage(); // Ensure a fresh page is initialized
+    pages = await browser.pages();
+    page = pages[0]; // Ensure a fresh page is initialized
     const userAgent =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
     await page.setUserAgent(userAgent);
