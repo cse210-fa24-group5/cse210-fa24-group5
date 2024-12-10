@@ -1,7 +1,6 @@
 /**
  * @jest-environment jsdom
  */
-
 const { initializeTimer, checkDifficulty } = require("../../src/timer");
 // const {
 //   describe,

@@ -186,12 +186,6 @@ function submitSettings() {
 window.addEventListener("load", () => {
   fetchTimeAndInitialize();
 });
-/**
- * Initialize timer on loading window
- */
-// window.onload = function () {
-//   initializeTimer();
-// };
 
 /**
  * Listeners for buttons
