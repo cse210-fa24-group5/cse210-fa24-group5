@@ -135,6 +135,36 @@ describe("LeetCode Problem Hijacker", () => {
       }),
     );
   });
+  it("should not add a problem to the Todo List if it is already marked as completed", () => {
+    // Prepare the environment
+    mockStorage.completed = [
+      {
+        title: "Example Problem",
+        number: "1",
+        link: "https://leetcode.com/problems/example-problem/",
+        difficulty: "Easy",
+      },
+    ];
+    initializeHijackButton();
+    const button = document.querySelector(".add-todo-btn");
+    button.click(); // Trigger the click event
+  
+    // Assertions
+    expect(chrome.storage.local.set).not.toHaveBeenCalledWith(
+      expect.objectContaining({
+        todo: expect.arrayContaining([
+          {
+            title: "Example Problem",
+            number: "1",
+            link: "https://leetcode.com/problems/example-problem/",
+            difficulty: "Easy",
+          },
+        ]),
+      }),
+    );
+    console.log("The completed task is not added again to the Todo List.");
+  });
+  
 });
 
 describe("observeProblemPage", () => {
