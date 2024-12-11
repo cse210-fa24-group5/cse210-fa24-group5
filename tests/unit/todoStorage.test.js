@@ -90,7 +90,7 @@ describe("LeetCode Problem Hijacker", () => {
     button.click();
 
     expect(chrome.storage.local.get).toHaveBeenCalledWith(
-      ["todo"],
+      ["todo", "completed"],
       expect.any(Function),
     );
     expect(chrome.storage.local.set).toHaveBeenCalledWith(
