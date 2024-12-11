@@ -1,7 +1,7 @@
 /**
  *  Function to retrieve problem details from the LeetCode page
  */
-function InformationRetrieval() {
+function informationRetrieval() {
   const flexTab = document.querySelector(`.flexlayout__tab`);
   const problemElement =
     flexTab?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]
@@ -39,7 +39,7 @@ function InformationRetrieval() {
  *  Function to save problem details to local storage
  */
 function saveProblemDetails() {
-  const problemData = InformationRetrieval();
+  const problemData = informationRetrieval();
   if (!problemData) return;
 
   chrome.storage.local.set({ problem: problemData }, () => {
@@ -92,7 +92,7 @@ const observer = new MutationObserver((mutations) => {
     handledSubmission = true;
     console.log("accepted!");
 
-    const problemData = InformationRetrieval();
+    const problemData = informationRetrieval();
     if (!problemData) {
       return;
     }
@@ -134,7 +134,7 @@ function isESModuleSupported() {
 }
 if (isESModuleSupported()) {
   module.exports = {
-    InformationRetrieval,
+    informationRetrieval,
     saveProblemDetails,
     autoSaveProblemDetails,
   };

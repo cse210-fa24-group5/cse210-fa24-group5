@@ -115,7 +115,9 @@ function renderList(container, items) {
       const spanNumber = document.createElement("span");
       const spanDifficulty = document.createElement("span");
 
-      spanTitle.textContent = problem.title;
+      let problemTitle = problem.title;
+      problemTitle = problemTitle.replace(/\+$/, "");
+      spanTitle.textContent = problemTitle;
       spanNumber.textContent = problem.number;
       spanDifficulty.textContent = problem.difficulty;
 

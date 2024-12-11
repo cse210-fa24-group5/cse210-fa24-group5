@@ -1,7 +1,7 @@
 /**
  * Retrieves the problem details from the LeetCode page.
  */
-function InformationRetrieval() {
+function informationRetrieval() {
   const problemElement =
     document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
       ?.children[0]?.children[0]?.children[0]?.children[0];
@@ -26,7 +26,7 @@ function InformationRetrieval() {
  * Adds a "+" button next to the problem title that adds the problem to the Todo List.
  */
 function initializeHijackButton() {
-  const problemData = InformationRetrieval();
+  const problemData = informationRetrieval();
   if (!problemData) return;
 
   const { title, number, link, difficulty } = problemData;
@@ -109,7 +109,7 @@ function isESModuleSupported() {
 }
 if (isESModuleSupported()) {
   module.exports = {
-    InformationRetrieval,
+    informationRetrieval,
     initializeHijackButton,
     observeProblemPage,
   };

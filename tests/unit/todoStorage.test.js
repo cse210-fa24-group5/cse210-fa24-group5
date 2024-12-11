@@ -1,6 +1,6 @@
 // Import the script (modify the path as needed)
 const {
-  InformationRetrieval,
+  informationRetrieval,
   initializeHijackButton,
   observeProblemPage,
 } = require("../../src/hijackAddButton");
@@ -55,7 +55,7 @@ describe("LeetCode Problem Hijacker", () => {
   });
 
   it("should correctly extract problem details from the DOM", () => {
-    const problemDetails = InformationRetrieval();
+    const problemDetails = informationRetrieval();
     expect(problemDetails).toEqual({
       title: "Example Problem+",
       number: "1",
@@ -66,7 +66,7 @@ describe("LeetCode Problem Hijacker", () => {
 
   it("should return null if the DOM structure is missing", () => {
     document.querySelector(".flexlayout__tab").remove();
-    const problemDetails = InformationRetrieval();
+    const problemDetails = informationRetrieval();
     expect(problemDetails).toBeNull();
   });
 
