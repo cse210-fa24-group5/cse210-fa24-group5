@@ -76,10 +76,6 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
   });
 
   beforeEach(async () => {
-    //Clicking the plus button adds the problem to the To-Do list
-    // Navigate to LeetCode problem page
-    // pages = await browser.pages();
-    // page = pages[0]; // Ensure a fresh page is initialized
     pages = await browser.pages();
     page = pages.find((p) => !p.isClosed());
     if (!page) {
@@ -105,7 +101,6 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
 
     await timeout(2000);
     console.log("Opening extension page...");
-    // extensionPage = await browser.newPage();// Initialize extensionPage as a new page
     await page.goto(`chrome-extension://${extensionId}/hello.html`, {
       waitUntil: "domcontentloaded",
     });
