@@ -1,3 +1,10 @@
+// Import the script (modify the path as needed)
+const {
+  InformationRetrieval,
+  initializeHijackButton,
+  observeProblemPage,
+} = require("../../src/hijackAddButton");
+
 // Mock the Chrome storage API
 const mockStorage = {};
 global.chrome = {
@@ -17,13 +24,6 @@ global.chrome = {
     },
   },
 };
-
-// Import the script (modify the path as needed)
-const {
-  InformationRetrieval,
-  initializeHijackButton,
-  observeProblemPage,
-} = require("../../src/hijackAddButton");
 
 describe("LeetCode Problem Hijacker", () => {
   beforeEach(() => {
@@ -171,7 +171,7 @@ describe("observeProblemPage", () => {
   beforeEach(() => {
     // Mock MutationObserver
     observeMock = jest.fn();
-    global.MutationObserver = jest.fn((callback) => ({
+    global.MutationObserver = jest.fn(() => ({
       observe: observeMock,
       disconnect: jest.fn(),
     }));

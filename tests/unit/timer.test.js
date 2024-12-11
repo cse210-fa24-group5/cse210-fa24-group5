@@ -2,14 +2,6 @@
  * @jest-environment jsdom
  */
 const { initializeTimer, checkDifficulty } = require("../../src/timer");
-// const {
-//   describe,
-//   beforeEach,
-//   afterEach,
-//   jest,
-//   it,
-//   expect,
-// } = require("@jest/globals");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
@@ -87,7 +79,7 @@ describe("Timer Functionality", () => {
   });
 
   it("alerts when timer settings change is made", () => {
-    let countdownElement, settingsPageButton;
+    let settingsPageButton;
 
     document.body.innerHTML = `
         <div class="flexlayout__tab">
@@ -130,7 +122,7 @@ describe("Timer Functionality", () => {
     initializeTimer();
 
     // Get DOM elements
-    countdownElement = document.getElementById("countdown");
+    // countdownElement = document.getElementById("countdown");
     settingsPageButton = document.getElementById("settingPageButton");
 
     settingsPageButton.click();

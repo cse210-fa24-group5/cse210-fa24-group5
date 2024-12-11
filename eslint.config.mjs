@@ -10,6 +10,7 @@ export default [
         ...globals.browser,
         ...globals.node,
         ...globals.webextensions,
+        ...globals.jest,
       },
     },
     rules: {

@@ -81,6 +81,7 @@ function renderTodoList(container, items) {
 
           chrome.storage.local.set({ todo: updatedTodo }, () => {
             console.log("Storage updated successfully.");
+            // eslint-disable-next-line no-use-before-define
             fetchAndRender();
           });
         });

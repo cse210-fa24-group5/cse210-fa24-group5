@@ -79,6 +79,7 @@ document.body.addEventListener("click", (event) => {
  */
 let handledSubmission = false;
 
+//eslint-disable-next-line no-unused-vars
 const observer = new MutationObserver((mutations) => {
   const successMessage = document.querySelector(
     'span[data-e2e-locator="submission-result"]',

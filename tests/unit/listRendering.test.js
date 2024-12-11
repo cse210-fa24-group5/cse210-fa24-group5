@@ -1,3 +1,5 @@
+const { initializeStorage, fetchAndRender } = require("../../src/popup");
+
 const mockStorage = {};
 global.chrome = {
   storage: {
@@ -16,13 +18,6 @@ global.chrome = {
     },
   },
 };
-
-const {
-  initializeStorage,
-  fetchAndRender,
-  renderTodoList,
-  renderList,
-} = require("../../src/popup");
 
 describe("initializeStorage", () => {
   it("should initialize the storage with empty lists if not present", () => {

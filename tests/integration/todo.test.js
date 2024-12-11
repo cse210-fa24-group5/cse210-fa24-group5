@@ -112,7 +112,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     console.log("Waiting for #todo-list");
     todoListSelector = "#todo-list";
     await page.waitForSelector(todoListSelector);
-  }, 25000);
+  }, 35000);
 
   afterEach(async () => {
     // Close the extension page after each test

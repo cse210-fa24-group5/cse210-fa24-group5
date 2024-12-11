@@ -452,7 +452,7 @@ describe("Content Script Tests", () => {
       const mockObserve = jest.fn();
       const mockDisconnect = jest.fn();
 
-      global.MutationObserver = jest.fn((callback) => ({
+      global.MutationObserver = jest.fn(() => ({
         observe: mockObserve,
         disconnect: mockDisconnect,
       }));
@@ -471,7 +471,6 @@ describe("Content Script Tests", () => {
         <button>Cancel</button>
       `;
 
-      const contentScript = require("../../src/content-script");
       const button = document.querySelector("button");
 
       // Simulate click event
