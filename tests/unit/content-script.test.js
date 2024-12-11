@@ -1,5 +1,5 @@
 const {
-  InformationRetrieval,
+  informationRetrieval,
   saveProblemDetails,
   autoSaveProblemDetails,
 } = require("../../src/content-script");
@@ -50,9 +50,9 @@ describe("Content Script Tests", () => {
     }
   });
 
-  describe("InformationRetrieval function", () => {
+  describe("informationRetrieval function", () => {
     it("retrieves problem details correctly", () => {
-      const result = InformationRetrieval();
+      const result = informationRetrieval();
       expect(result).toEqual({
         title: "Example Problem",
         number: "1",
@@ -63,7 +63,7 @@ describe("Content Script Tests", () => {
 
     it("returns null when problem element is missing", () => {
       document.body.innerHTML = "";
-      const result = InformationRetrieval();
+      const result = informationRetrieval();
       expect(result).toBeNull();
       expect(console.warn).toHaveBeenCalledWith(
         "Problem element not found. The DOM structure may have changed or not loaded yet.",
@@ -73,7 +73,7 @@ describe("Content Script Tests", () => {
     it("returns null when problem data is incomplete (missing title)", () => {
       const problemLink = document.querySelector("a");
       problemLink.textContent = "";
-      const result = InformationRetrieval();
+      const result = informationRetrieval();
       expect(result).toBeNull();
       expect(console.warn).toHaveBeenCalledWith(
         "Incomplete problem data. Skipping retrieval.",
@@ -85,7 +85,7 @@ describe("Content Script Tests", () => {
         ".flexlayout__tab div:nth-child(2)",
       );
       difficultyDiv.textContent = "";
-      const result = InformationRetrieval();
+      const result = informationRetrieval();
       expect(result).toBeNull();
       expect(console.warn).toHaveBeenCalledWith(
         "Incomplete problem data. Skipping retrieval.",
@@ -112,10 +112,10 @@ describe("Content Script Tests", () => {
       );
     });
 
-    it("does not save when InformationRetrieval returns null", () => {
+    it("does not save when informationRetrieval returns null", () => {
       jest.mock("../../src/content-script", () => ({
         ...jest.requireActual("../../src/content-script"),
-        InformationRetrieval: jest.fn(() => null),
+        informationRetrieval: jest.fn(() => null),
       }));
       jest.resetModules();
       const { saveProblemDetails } = require("../../src/content-script");
@@ -250,11 +250,11 @@ describe("Content Script Tests", () => {
       }, 0);
     });
 
-    it("handles case when InformationRetrieval returns null in MutationObserver", (done) => {
+    it("handles case when informationRetrieval returns null in MutationObserver", (done) => {
       const contentScript = require("../../src/content-script");
 
-      // Mock InformationRetrieval to return null
-      jest.spyOn(contentScript, "InformationRetrieval").mockReturnValue(null);
+      // Mock informationRetrieval to return null
+      jest.spyOn(contentScript, "informationRetrieval").mockReturnValue(null);
 
       // Mock MutationObserver
       let callback;
@@ -444,7 +444,7 @@ describe("Content Script Tests", () => {
       `;
 
       const contentScript = require("../../src/content-script");
-      const result = contentScript.InformationRetrieval();
+      const result = contentScript.informationRetrieval();
 
       expect(result).toBeNull(); // Ensure the function returns null for incomplete data
     });
@@ -478,9 +478,9 @@ describe("Content Script Tests", () => {
 
       expect(global.chrome.storage.local.set).not.toHaveBeenCalled(); // Ensure storage is not updated
     });
-    it("does not update completed list if InformationRetrieval returns null", (done) => {
+    it("does not update completed list if informationRetrieval returns null", (done) => {
       jest
-        .spyOn(require("../../src/content-script"), "InformationRetrieval")
+        .spyOn(require("../../src/content-script"), "informationRetrieval")
         .mockReturnValue(null);
 
       const mockSet = jest.fn((data, callback) => callback && callback());
