@@ -106,25 +106,25 @@ function addDraggingListeners() {
     return false;
   }
   if (!isListenerAdded) {
-    timerOverlay.addEventListener("mousedown", function(event) {
+    timerOverlay.addEventListener("mousedown", function (event) {
       document.body.style.userSelect = "none"; //can't select text when dragging
       isDragging = true;
       offsetX = event.clientX - timerOverlay.offsetLeft;
       offsetY = event.clientY - timerOverlay.offsetTop;
-      timerOverlay.style.cursor = "grabbing"; 
+      timerOverlay.style.cursor = "grabbing";
     });
-    document.addEventListener("mousemove", function(event) {
-        if (isDragging) {
-          timerOverlay.style.left = event.clientX - offsetX + "px";
-          timerOverlay.style.top = event.clientY - offsetY + "px";
-        }
+    document.addEventListener("mousemove", function (event) {
+      if (isDragging) {
+        timerOverlay.style.left = event.clientX - offsetX + "px";
+        timerOverlay.style.top = event.clientY - offsetY + "px";
+      }
     });
-    document.addEventListener("mouseup", function() {
-        if (isDragging) {
-            document.body.style.userSelect = "";
-            isDragging = false;
-            timerOverlay.style.cursor = "grab";
-        }
+    document.addEventListener("mouseup", function () {
+      if (isDragging) {
+        document.body.style.userSelect = "";
+        isDragging = false;
+        timerOverlay.style.cursor = "grab";
+      }
     });
     return true;
   }
@@ -272,7 +272,7 @@ if (isESModuleSupported()) {
     checkDifficulty,
     isESModuleSupported,
     onUrlChange,
-    addDraggingListeners
+    addDraggingListeners,
   };
 } else {
   titleObserver.observe(document.querySelector("title"), { childList: true });
