@@ -12,7 +12,7 @@ function InformationRetrieval() {
       "Problem element not found. The DOM structure may have changed or not loaded yet.",
     );
     return null;
-}
+  }
 
   const problemTextContent = problemElement.textContent || "";
   const problemTitle = problemTextContent.split(". ")[1];

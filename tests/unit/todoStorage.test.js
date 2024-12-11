@@ -148,7 +148,7 @@ describe("LeetCode Problem Hijacker", () => {
     initializeHijackButton();
     const button = document.querySelector(".add-todo-btn");
     button.click(); // Trigger the click event
-  
+
     // Assertions
     expect(chrome.storage.local.set).not.toHaveBeenCalledWith(
       expect.objectContaining({
@@ -164,7 +164,6 @@ describe("LeetCode Problem Hijacker", () => {
     );
     console.log("The completed task is not added again to the Todo List.");
   });
-  
 });
 
 describe("observeProblemPage", () => {

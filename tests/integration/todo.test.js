@@ -43,10 +43,10 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     pages = await browser.pages();
     page = pages[0];
     const userAgent =
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
     await page.setUserAgent(userAgent);
     await page.setExtraHTTPHeaders({
-    "Accept-Language": "en-US,en;q=0.9",
+      "Accept-Language": "en-US,en;q=0.9",
     });
     await page.goto("chrome://extensions/");
     await page.waitForSelector("extensions-manager");
@@ -86,10 +86,10 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
       throw new Error("No open pages available.");
     }
     const userAgent =
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36";
     await page.setUserAgent(userAgent);
     await page.setExtraHTTPHeaders({
-    "Accept-Language": "en-US,en;q=0.9",
+      "Accept-Language": "en-US,en;q=0.9",
     });
     console.log("Navigating to LeetCode problem page...");
     await page.goto("https://leetcode.com/problems/two-sum/description/", {
@@ -99,27 +99,27 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     console.log("Waiting for add-to-do button...");
     await timeout(5000);
     await page.waitForSelector(".add-todo-btn");
-    console.log( "Got the add-to-do button... ");
+    console.log("Got the add-to-do button... ");
     console.log("Clicking the add-to-do button...");
     await page.click(".add-todo-btn");
 
     await timeout(2000);
     console.log("Opening extension page...");
-    // extensionPage = await browser.newPage();// Initialize extensionPage as a new page 
+    // extensionPage = await browser.newPage();// Initialize extensionPage as a new page
     await page.goto(`chrome-extension://${extensionId}/hello.html`, {
       waitUntil: "domcontentloaded",
     });
     console.log("Waiting for #todo-list");
     todoListSelector = "#todo-list";
     await page.waitForSelector(todoListSelector);
-  }, 15000);
+  }, 25000);
 
   afterEach(async () => {
     // Close the extension page after each test
     const pages = await browser.pages();
     for (const openPage of pages) {
-    if (!(await openPage.isClosed())) {
-      await openPage.close(); // Close each open page
+      if (!(await openPage.isClosed())) {
+        await openPage.close(); // Close each open page
       }
     }
   });
@@ -197,11 +197,11 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     await page.click(removeButtonSelector);
 
     // Wait for the change in the To-Do list
-    console.log("Wait for the change in the To-Do list")
+    console.log("Wait for the change in the To-Do list");
     await page.waitForSelector(todoListSelector);
 
     // Verify the problem is removed from the To-Do list
-    console.log("Verify the problem is removed from the To-Do list")
+    console.log("Verify the problem is removed from the To-Do list");
     const updatedTodoItems = await page.$$eval(
       `${todoListSelector} > li`,
       (listItems) =>

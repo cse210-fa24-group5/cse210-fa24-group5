@@ -176,7 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 document.addEventListener("DOMContentLoaded", () => {
-
   initializeStorage();
   fetchAndRender();
   setInterval(fetchAndRender, 5000);
