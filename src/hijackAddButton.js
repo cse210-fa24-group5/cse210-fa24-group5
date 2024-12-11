@@ -1,20 +1,19 @@
 /**
- * Creates a button in the leetcode page
- * that adds the current problem to Todo-List/Local Storage
+ * Retrieves the problem details from the LeetCode page.
  */
-// How to retrieve the Problem Details
-function InformationRetrieval() {
+function informationRetrieval() {
   const problemElement =
-    document.querySelector(`.flexlayout__tab`).children[0].children[0]
-      .children[0].children[0].children[0].children[0];
-  const problemTextContent = problemElement.textContent;
+    document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
+      ?.children[0]?.children[0]?.children[0]?.children[0];
+  if (!problemElement) return null;
 
+  const problemTextContent = problemElement.textContent;
   const problemTitle = problemTextContent.split(". ")[1];
   const problemNumber = problemTextContent.split(". ")[0];
   const problemLink = problemElement.href;
   const problemDifficulty =
-    document.querySelector(`.flexlayout__tab`).children[0].children[0]
-      .children[1].children[0].textContent;
+    document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
+      ?.children[1]?.children[0]?.textContent;
   return {
     title: problemTitle,
     number: problemNumber,
@@ -23,25 +22,45 @@ function InformationRetrieval() {
   };
 }
 
-//Overlays a + button near the problem title which adds problem to todo list.
+/**
+ * Adds a "+" button next to the problem title that adds the problem to the Todo List.
+ */
 function initializeHijackButton() {
-  const { title, number, link, difficulty } = InformationRetrieval();
+  const problemData = informationRetrieval();
+  if (!problemData) return;
+
+  const { title, number, link, difficulty } = problemData;
   const problemElement =
-    document.querySelector(`.flexlayout__tab`).children[0].children[0]
-      .children[0].children[0].children[0].children[0];
+    document.querySelector(`.flexlayout__tab`)?.children[0]?.children[0]
+      ?.children[0]?.children[0]?.children[0]?.children[0];
+
+  // Check if the button is already added
+  if (problemElement.querySelector(".add-todo-btn")) return;
+
   const button = document.createElement("button");
   button.textContent = "+";
+  button.className = "add-todo-btn"; // Add a class to identify the button
   problemElement.appendChild(button);
 
   button.addEventListener("click", () => {
-    chrome.storage.local.get(["todo"], (result) => {
+    chrome.storage.local.get(["todo", "completed"], (result) => {
+      const completed = result.completed || [];
       const todo = result.todo || [];
+
       const newTask = {
         title: title,
         number: number,
         link: link,
         difficulty: difficulty,
       };
+
+      // Check if the task is already in the completed list
+      if (completed.some((task) => task.number === number)) {
+        console.log("This problem is already completed!");
+        return;
+      }
+
+      // Check if the task is already in the todo list
       if (!todo.some((task) => task.number === number)) {
         todo.push(newTask);
         chrome.storage.local.set({ todo }, () => {
@@ -57,8 +76,42 @@ function initializeHijackButton() {
 }
 
 /**
- * Initialize button on loading problem
+ * Watches for changes in the DOM to detect when a new problem page is loaded.
  */
-window.onload = function () {
-  initializeHijackButton();
-};
+function observeProblemPage() {
+  const targetNode = document.body;
+  const config = { childList: true, subtree: true };
+
+  const callback = (mutationsList) => {
+    for (const mutation of mutationsList) {
+      if (mutation.type === "childList") {
+        // Initialize the button whenever the problem page changes
+        initializeHijackButton();
+      }
+    }
+  };
+
+  const observer = new MutationObserver(callback);
+  observer.observe(targetNode, config);
+}
+
+/**
+ *  Start observing for DOM changes
+ */
+function isESModuleSupported() {
+  try {
+    new Function("import('data:text/javascript,export{}')");
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+if (isESModuleSupported()) {
+  module.exports = {
+    informationRetrieval,
+    initializeHijackButton,
+    observeProblemPage,
+  };
+}
+observeProblemPage();

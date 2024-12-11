@@ -1,16 +1,32 @@
-//storing the problem details as an object
-function InformationRetrieval() {
+/**
+ *  Function to retrieve problem details from the LeetCode page
+ */
+function informationRetrieval() {
+  const flexTab = document.querySelector(`.flexlayout__tab`);
   const problemElement =
-    document.querySelector(`.flexlayout__tab`).children[0].children[0]
-      .children[0].children[0].children[0].children[0];
-  const problemTextContent = problemElement.textContent;
+    flexTab?.children?.[0]?.children?.[0]?.children?.[0]?.children?.[0]
+      ?.children?.[0]?.children?.[0];
 
+  if (!problemElement) {
+    console.warn(
+      "Problem element not found. The DOM structure may have changed or not loaded yet.",
+    );
+    return null;
+  }
+
+  const problemTextContent = problemElement.textContent || "";
   const problemTitle = problemTextContent.split(". ")[1];
   const problemNumber = problemTextContent.split(". ")[0];
   const problemLink = problemElement.href;
   const problemDifficulty =
-    document.querySelector(`.flexlayout__tab`).children[0].children[0]
-      .children[1].children[0].textContent;
+    document.querySelector(`.flexlayout__tab`)?.children?.[0]?.children?.[0]
+      ?.children?.[1]?.children?.[0]?.textContent;
+
+  if (!problemTitle || !problemNumber || !problemLink || !problemDifficulty) {
+    console.warn("Incomplete problem data. Skipping retrieval.");
+    return null;
+  }
+
   return {
     title: problemTitle,
     number: problemNumber,
@@ -19,21 +35,21 @@ function InformationRetrieval() {
   };
 }
 
-let problem = new Object();
-const { title, number, link, difficulty } = InformationRetrieval();
-problem = { title, number, link, difficulty };
-
-//saving the current problem to local storage
+/**
+ *  Function to save problem details to local storage
+ */
 function saveProblemDetails() {
-  if (problem.number) {
-    chrome.storage.local.set({ problem: { ...problem } }, () => {
-      console.log("Stored problem:", problem);
-    });
-  } else {
-    console.log("Problem not found.");
-  }
+  const problemData = informationRetrieval();
+  if (!problemData) return;
+
+  chrome.storage.local.set({ problem: problemData }, () => {
+    console.log("Problem saved to local storage.");
+  });
 }
 
+/**
+ * Function to automatically save problem details when the page updates
+ */
 function autoSaveProblemDetails() {
   saveProblemDetails();
   const observer = new MutationObserver(() => {
@@ -46,57 +62,81 @@ function autoSaveProblemDetails() {
     }
   });
   observer.observe(document.body, { childList: true, subtree: true });
-  console.log("Observing for problem details...");
 }
 
-//
+/**
+ *  Event listener for problem submission
+ */
 document.body.addEventListener("click", (event) => {
   const submitButton = event.target.closest("button");
   if (submitButton && submitButton.textContent.includes("Submit")) {
-    console.log("Submit button clicked.");
     saveProblemDetails();
   }
 });
 
-//On accepted submission removes problem from to-do list and adds to completed problems list
+/**
+ * Observe for submission results to update storage
+ */
+let handledSubmission = false;
+
+//eslint-disable-next-line no-unused-vars
 const observer = new MutationObserver((mutations) => {
-  mutations.forEach(() => {
-    const successMessage = document.querySelector(
-      'span[data-e2e-locator="submission-result"]',
-    );
-    if (successMessage && successMessage.textContent.includes("Accepted")) {
-      console.log("Submission successful.");
+  const successMessage = document.querySelector(
+    'span[data-e2e-locator="submission-result"]',
+  );
+  if (
+    successMessage &&
+    successMessage.textContent.includes("Accepted") &&
+    !handledSubmission
+  ) {
+    handledSubmission = true;
+    console.log("accepted!");
 
-      chrome.storage.local.get("problem", (result) => {
-        const savedProblem = result.problem || null;
-        if (!savedProblem) {
-          console.warn("No saved problem found!");
-          return;
-        }
-
-        chrome.storage.local.get(["completed", "todo"], (result) => {
-          const completed = result.completed || [];
-          const todo = result.todo || [];
-          if (!completed.some((item) => item.number === savedProblem.number)) {
-            completed.push(savedProblem);
-          }
-          const updatedTodo = todo.filter(
-            (item) => item.number !== savedProblem.number,
-          );
-
-          chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
-            console.log("Storage updated successfully.");
-          });
-        });
-        chrome.storage.local.remove(problem, () => {
-          console.log("Cleared stored current problem");
-        });
-      });
+    const problemData = informationRetrieval();
+    if (!problemData) {
+      return;
     }
-  });
+    chrome.storage.local.get(["completed", "todo"], (result) => {
+      const completed = result.completed || [];
+      const todo = result.todo || [];
+      if (!completed.some((item) => item.number === problemData.number)) {
+        completed.push(problemData);
+      } else {
+        console.log("Problem already exists in completed list.");
+      }
+      const updatedTodo = todo.filter(
+        (item) => item.number !== problemData.number,
+      );
+
+      chrome.storage.local.set({ completed, todo: updatedTodo }, () => {
+        console.log("Storage updated: problem moved to completed list.");
+      });
+    });
+    observer.disconnect();
+    console.log("Observer disconnected to prevent duplicate processing.");
+  } else if (handledSubmission) {
+    console.log("Submission already handled. Skipping.");
+  }
 });
 
+/**
+ * Initialize problem auto-save and observe DOM changes
+ */
 autoSaveProblemDetails();
-
+function isESModuleSupported() {
+  try {
+    new Function("import('data:text/javascript,export{}')");
+    return true;
+  } catch (e) {
+    console.log(e);
+    return false;
+  }
+}
+if (isESModuleSupported()) {
+  module.exports = {
+    informationRetrieval,
+    saveProblemDetails,
+    autoSaveProblemDetails,
+  };
+}
 observer.observe(document.body, { childList: true, subtree: true });
-console.log("Content script loaded and observing DOM changes.");

@@ -1,22 +1,19 @@
 /**
  * @jest-environment jsdom
  */
-
-const { initializeTimer, checkDifficulty } = require("../../src/timer");
-// const {
-//   describe,
-//   beforeEach,
-//   afterEach,
-//   jest,
-//   it,
-//   expect,
-// } = require("@jest/globals");
+const {
+  initializeTimer,
+  checkDifficulty,
+  isESModuleSupported,
+  addDraggingListeners,
+} = require("../../src/timer");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
 
   beforeEach(() => {
     // Initialize the timer
+    // onUrlChange()? //TODO
     initializeTimer([0.06, 40, 60]);
 
     // Get DOM elements
@@ -88,7 +85,7 @@ describe("Timer Functionality", () => {
   });
 
   it("alerts when timer settings change is made", () => {
-    let countdownElement, settingsPageButton;
+    let settingsPageButton;
 
     document.body.innerHTML = `
         <div class="flexlayout__tab">
@@ -131,7 +128,7 @@ describe("Timer Functionality", () => {
     initializeTimer();
 
     // Get DOM elements
-    countdownElement = document.getElementById("countdown");
+    // countdownElement = document.getElementById("countdown");
     settingsPageButton = document.getElementById("settingPageButton");
 
     settingsPageButton.click();
@@ -242,6 +239,15 @@ describe("checkDifficulty Functionality", () => {
 
     // Check if the timer duration is set to 60 minutes for Hard
     expect(countdownElement.textContent).toBe("60:00"); // Hard should be 60:00 (60 minutes)
+  });
+});
+
+describe("Detect environment Functionality", () => {
+  it("Detects environment correctly", () => {
+    expect(isESModuleSupported()).toBe(
+      true,
+      "The environment should support ES modules",
+    );
   });
 });
 
@@ -433,5 +439,20 @@ describe("Timer Settings Functionality", () => {
     expect(countdownElement.textContent).toBe("5:00"); // Adjust this based on your timer format
 
     window.alert.mockRestore();
+  });
+});
+
+describe("Add Drag Listener Functionality", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("Adds listener correctly", () => {
+    initializeTimer();
+    expect(addDraggingListeners()).toBe(true);
+  });
+
+  it("Doesn't add when no element", () => {
+    expect(addDraggingListeners()).toBe(false);
   });
 });
