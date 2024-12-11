@@ -158,7 +158,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
   }, 10000);
   test("Clicking the problem in the list opens the problem", async () => {
     // Extract and verify the To-Do list items
-    console.log("Extract and verify the To-Do list items")
+    console.log("Extract and verify the To-Do list items");
     const todoItems = await page.$$eval(
       `${todoListSelector} > li`,
       (listItems) =>
@@ -174,7 +174,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
     );
 
     // Check if the problem is added to the To-Do list
-    console.log("Check if the problem is added to the To-Do list")
+    console.log("Check if the problem is added to the To-Do list");
     const problemExists = todoItems.some(
       (item) =>
         item.number === "1" &&
