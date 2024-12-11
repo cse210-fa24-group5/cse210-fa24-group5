@@ -94,14 +94,6 @@ function checkDifficulty() {
   return difficulty;
 }
 
-function fetchTimeAndInitialize() {
-  let times = [21, 41, 61];
-  chrome.storage.local.get(["mins"], (result) => {
-    times = result.mins;
-    initializeTimer(times);
-  });
-}
-
 /**
  * Initializes timer's components and remaining time
  * @returns {number}  minutes - minutes remaining for timer
@@ -141,6 +133,14 @@ function initializeTimer(times = [20, 40, 60]) {
   return minutes;
 }
 
+function fetchTimeAndInitialize() {
+  let times = [21, 41, 61];
+  chrome.storage.local.get(["mins"], (result) => {
+    times = result.mins;
+    initializeTimer(times);
+  });
+}
+
 function showSettingsPage() {
   const settingPage = document.getElementById("setting-overlay");
   if (settingPage) {
@@ -175,8 +175,8 @@ function submitSettings() {
   const ez = document.getElementById("easy").value;
   const mid = document.getElementById("medium").value;
   const hard = document.getElementById("hard").value;
-  new_times = [ez, mid, hard];
-  chrome.storage.local.set({ mins: new_times }, () => {
+  const newTimes = [ez, mid, hard];
+  chrome.storage.local.set({ mins: newTimes }, () => {
     window.alert("Settings Saved!");
     fetchTimeAndInitialize();
     hideSettingsPage();
@@ -186,12 +186,6 @@ function submitSettings() {
 window.addEventListener("load", () => {
   fetchTimeAndInitialize();
 });
-/**
- * Initialize timer on loading window
- */
-// window.onload = function () {
-//   initializeTimer();
-// };
 
 /**
  * Listeners for buttons
