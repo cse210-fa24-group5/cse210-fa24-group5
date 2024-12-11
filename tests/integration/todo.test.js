@@ -193,6 +193,7 @@ describe("To-Do List Functionality with LeetCode Timer Extension", () => {
 
     await timeout(2000);
 
+    //checks before and after pages count
     const pagesAfterClick = await browser.pages();
     const finalPageCount = pagesAfterClick.length;
     console.log("Verify new page was opened");
