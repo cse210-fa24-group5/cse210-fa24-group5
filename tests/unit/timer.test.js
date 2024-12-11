@@ -1,13 +1,19 @@
 /**
  * @jest-environment jsdom
  */
-const { initializeTimer, checkDifficulty } = require("../../src/timer");
+const {
+  initializeTimer,
+  checkDifficulty,
+  isESModuleSupported,
+  addDraggingListeners,
+} = require("../../src/timer");
 
 describe("Timer Functionality", () => {
   let countdownElement, startTimerButton, resetTimerButton, showHideTimerButton;
 
   beforeEach(() => {
     // Initialize the timer
+    // onUrlChange()? //TODO
     initializeTimer([0.06, 40, 60]);
 
     // Get DOM elements
@@ -236,6 +242,15 @@ describe("checkDifficulty Functionality", () => {
   });
 });
 
+describe("Detect environment Functionality", () => {
+  it("Detects environment correctly", () => {
+    expect(isESModuleSupported()).toBe(
+      true,
+      "The environment should support ES modules",
+    );
+  });
+});
+
 describe("Timer Settings Functionality", () => {
   it("sets the timer duration for Easy difficulty", () => {
     let countdownElement, settingsPageButton;
@@ -424,5 +439,20 @@ describe("Timer Settings Functionality", () => {
     expect(countdownElement.textContent).toBe("5:00"); // Adjust this based on your timer format
 
     window.alert.mockRestore();
+  });
+});
+
+describe("Add Drag Listener Functionality", () => {
+  beforeEach(() => {
+    document.body.innerHTML = "";
+  });
+
+  it("Adds listener correctly", () => {
+    initializeTimer();
+    expect(addDraggingListeners()).toBe(true);
+  });
+
+  it("Doesn't add when no element", () => {
+    expect(addDraggingListeners()).toBe(false);
   });
 });
